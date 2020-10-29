@@ -1,5 +1,5 @@
 {
-	"name": "shuffle-ext",
+	"name": "shuffle",
 	"displayName": "shuffle-ext",
 	"description": "",
 	"version": "0.0.1",
@@ -10,14 +10,18 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:shuffle-ext.helloWorld"
+		"onCommand:shuffle.openWindow"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"keybindings": {
+			"key": "ctrl+d",
+			"command": "shuffle.openWindow"
+		},
 		"commands": [
 			{
-				"command": "shuffle-ext.helloWorld",
-				"title": "Hello World"
+				"command": "shuffle-ext.openWindow",
+				"title": "Shuffle builder: Open shuffle builder window"
 			}
 		]
 	},
