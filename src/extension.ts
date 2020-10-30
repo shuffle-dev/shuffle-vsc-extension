@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import fetch from 'node-fetch';
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -24,6 +25,7 @@ class ShufflePanel {
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
+    private _lastActiveEditor: vscode.TextEditor | undefined;
     private _disposables: vscode.Disposable[] = [];
 
     public static createOrShow(extensionUri: vscode.Uri) {
@@ -37,7 +39,7 @@ class ShufflePanel {
         const panel = vscode.window.createWebviewPanel(
             ShufflePanel.viewType, 'Shuffle', column, {
                 enableScripts: true,
-
+                retainContextWhenHidden: true,
                 localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
             }
         );
@@ -51,8 +53,10 @@ class ShufflePanel {
         this._extensionUri = extensionUri;
 
         this._createPanel();
+        this._onReceiveMessage();
         this._onChangeView();
         this._onDispose();
+        this._trackActiveEditor();
     }
 
     public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -72,26 +76,123 @@ class ShufflePanel {
     }
 
     private _createPanel() {
-        const webview = this._panel.webview;
         const nonce = getNonce();
 
-        this._panel.webview.html = `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
-				-->
-<!--				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">-->
+        this._panel.webview.html = this._getHtml(nonce);
+    }
+
+    private _getHtml(nonce: string) {
+        const webview = this._panel.webview;
+        const mediaPath = vscode.Uri.joinPath(this._extensionUri,  'media');
+
+        const scriptPath = vscode.Uri.joinPath(mediaPath, 'main.js');
+        const vscStylePath = vscode.Uri.joinPath(mediaPath, 'vscode.css');
+        const stylePath = vscode.Uri.joinPath(mediaPath, 'style.css');
+
+        const scriptUri = webview.asWebviewUri(scriptPath);
+        const vscStyleUri = webview.asWebviewUri(vscStylePath);
+        const styleUri = webview.asWebviewUri(stylePath);
+
+        return (
+            `<!DOCTYPE html>
+		    <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <!--
+                    Use a content security policy to only allow loading images from https or from our extension directory,
+                    and only allow scripts that have a specific nonce.
+                -->
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				
+			    <link href="${vscStyleUri}" rel="stylesheet">
+				<link href="${styleUri}" rel="stylesheet">
+				
 				<title>Shuffle</title>
 			</head>
 			<body>
-				<iframe src="https://bootstrapshuffle.com/pl" frameborder="0" width="100%" style="min-height: 100vh"></iframe>
-<!--				<script nonce="${nonce}" src=""></script>-->
+			    <main>
+                    <div class="select-container"></div>
+                    <div class="components-container"></div>
+                </main>
+			    <script nonce="${nonce}">
+			        window.vscApi = acquireVsCodeApi();
+                </script>
+				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
-			</html>`;
+			</html>`
+        );
+    }
+
+    private _fetchConfig() {
+        const CONFIG_URL = 'https://tailwind.build/components/js/27db_components.js?v=mn20';
+
+        fetch(CONFIG_URL)
+            .then((res) => res.text())
+            .then(res => {
+                const firstEqualPosition = res.indexOf('=');
+                const validJsonConfig = res.substring(firstEqualPosition+1).trim().slice(0, -1) + '\n';
+                const jsonConfig = JSON.parse(validJsonConfig);
+
+                this._panel.webview.postMessage({
+                    type: 'config:res',
+                    data: jsonConfig
+                });
+            })
+            .catch(e => {
+                vscode.window.showErrorMessage("Shuffle: Cannot fetch config file");
+                console.error(e);
+            });
+    }
+
+    private _pasteCodeInsideEditor(code: string) {
+        if (!this._isLastEditorOpen()) {
+            vscode.window.showErrorMessage("Shuffle: Before choose component focus text editor");
+            return;
+        }
+
+        if (!this._isWindowSplitted()) {
+            vscode.window.showErrorMessage("Shuffle: Extension work only with splitted window");
+            return;
+        }
+
+        this._lastActiveEditor?.edit((editor) => {
+            const position = this._lastActiveEditor?.selection.active;
+            const line = position?.line !== undefined ? position?.line : 0;
+            const character = position?.character !== undefined ? position?.character : 0;
+            editor.insert(new vscode.Position(line, character), code);
+        });
+    }
+
+    private _onReceiveMessage() {
+        this._panel.webview.onDidReceiveMessage((message) => {
+            switch (message.type) {
+                case 'config:req':
+                    this._fetchConfig();
+                    break;
+                case 'source:req':
+                    this._pasteCodeInsideEditor(message.data);
+                    break;
+            }
+        });
+    }
+
+    private _trackActiveEditor() {
+        this._lastActiveEditor = vscode.window.activeTextEditor;
+
+        vscode.window.onDidChangeActiveTextEditor(editor => {
+            if (editor !== undefined) {
+                this._lastActiveEditor = editor;
+            }
+        });
+    }
+
+    private _isLastEditorOpen() {
+        return !this._lastActiveEditor?.document.isClosed;
+    }
+
+    private _isWindowSplitted() {
+        return this._panel.viewColumn !== vscode.ViewColumn.One;
     }
 
     private _onChangeView() {
