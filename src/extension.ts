@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import fetch from 'node-fetch';
+import {writeSync as writeSyncToClipboard} from 'clipboardy';
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -25,7 +26,6 @@ class ShufflePanel {
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionUri: vscode.Uri;
-    private _lastActiveEditor: vscode.TextEditor | undefined;
     private _disposables: vscode.Disposable[] = [];
 
     public static createOrShow(extensionUri: vscode.Uri) {
@@ -56,7 +56,6 @@ class ShufflePanel {
         this._onReceiveMessage();
         this._onChangeView();
         this._onDispose();
-        this._trackActiveEditor();
     }
 
     public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -145,23 +144,9 @@ class ShufflePanel {
             });
     }
 
-    private _pasteCodeInsideEditor(code: string) {
-        if (!this._isLastEditorOpen()) {
-            vscode.window.showErrorMessage("Shuffle: Before choose component focus text editor");
-            return;
-        }
-
-        if (!this._isWindowSplitted()) {
-            vscode.window.showErrorMessage("Shuffle: Extension work only with splitted window");
-            return;
-        }
-
-        this._lastActiveEditor?.edit((editor) => {
-            const position = this._lastActiveEditor?.selection.active;
-            const line = position?.line !== undefined ? position?.line : 0;
-            const character = position?.character !== undefined ? position?.character : 0;
-            editor.insert(new vscode.Position(line, character), code);
-        });
+    private _copyToClipboard(code: string) {
+        writeSyncToClipboard(code);
+        vscode.window.showInformationMessage("Copied to clipboard!");
     }
 
     private _onReceiveMessage() {
@@ -171,28 +156,10 @@ class ShufflePanel {
                     this._fetchConfig();
                     break;
                 case 'source:req':
-                    this._pasteCodeInsideEditor(message.data);
+                    this._copyToClipboard(message.data);
                     break;
             }
         });
-    }
-
-    private _trackActiveEditor() {
-        this._lastActiveEditor = vscode.window.activeTextEditor;
-
-        vscode.window.onDidChangeActiveTextEditor(editor => {
-            if (editor !== undefined) {
-                this._lastActiveEditor = editor;
-            }
-        });
-    }
-
-    private _isLastEditorOpen() {
-        return !this._lastActiveEditor?.document.isClosed;
-    }
-
-    private _isWindowSplitted() {
-        return this._panel.viewColumn !== vscode.ViewColumn.One;
     }
 
     private _onChangeView() {

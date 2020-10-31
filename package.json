@@ -48,6 +48,7 @@
         "vscode-test": "^1.4.0"
     },
     "dependencies": {
+        "clipboardy": "^2.3.0",
         "node-fetch": "^2.6.1"
     }
 }
