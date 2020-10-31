@@ -27,11 +27,19 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
+        "compile": "npm-run-all compile:ext compile:webview",
+        "compile:ext": "tsc -p ./",
+        "compile:webview": "npm-run-all --parallel compile:webview:html compile:webview:css compile:webview:js",
+        "compile:webview:html": "parcel watch ./src/webview/pug/index.pug --out-dir ./media",
+        "compile:webview:css": "parcel watch ./src/webview/scss/main.scss --out-dir ./media",
+        "compile:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target electron",
         "lint": "eslint src --ext ts",
-        "watch": "tsc -watch -p ./",
-        "pretest": "npm run compile && npm run lint",
-        "test": "node ./out/test/runTest.js"
+        "watch": "npm-run-all --parallel watch:ext watch:webview",
+        "watch:ext": "tsc -watch -p ./",
+        "watch:webview": "npm-run-all --parallel watch:webview:html watch:webview:css watch:webview:js",
+        "watch:webview:html": "parcel watch ./src/webview/pug/index.pug --out-dir ./media",
+        "watch:webview:css": "parcel watch ./src/webview/scss/main.scss --out-dir ./media",
+        "watch:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target electron"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
@@ -44,6 +52,10 @@
         "eslint": "^7.9.0",
         "glob": "^7.1.6",
         "mocha": "^8.1.3",
+        "npm-run-all": "^4.1.5",
+        "parcel-bundler": "^1.12.4",
+        "pug": "^3.0.0",
+        "sass": "^1.28.0",
         "typescript": "^4.0.2",
         "vscode-test": "^1.4.0"
     },
