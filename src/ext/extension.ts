@@ -85,11 +85,9 @@ class ShufflePanel {
         const mediaPath = vscode.Uri.joinPath(this._extensionUri,  'media');
 
         const scriptPath = vscode.Uri.joinPath(mediaPath, 'main.js');
-        const vscStylePath = vscode.Uri.joinPath(mediaPath, 'vscode.css');
-        const stylePath = vscode.Uri.joinPath(mediaPath, 'style.css');
+        const stylePath = vscode.Uri.joinPath(mediaPath, 'main.css');
 
         const scriptUri = webview.asWebviewUri(scriptPath);
-        const vscStyleUri = webview.asWebviewUri(vscStylePath);
         const styleUri = webview.asWebviewUri(stylePath);
 
         return (
@@ -104,9 +102,7 @@ class ShufflePanel {
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				
-			    <link href="${vscStyleUri}" rel="stylesheet">
 				<link href="${styleUri}" rel="stylesheet">
-				
 				<title>Shuffle</title>
 			</head>
 			<body>

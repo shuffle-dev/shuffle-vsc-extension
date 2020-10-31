@@ -30,16 +30,16 @@
         "compile": "npm-run-all compile:ext compile:webview",
         "compile:ext": "tsc -p ./",
         "compile:webview": "npm-run-all --parallel compile:webview:html compile:webview:css compile:webview:js",
-        "compile:webview:html": "parcel watch ./src/webview/pug/index.pug --out-dir ./media",
-        "compile:webview:css": "parcel watch ./src/webview/scss/main.scss --out-dir ./media",
-        "compile:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target electron",
+        "compile:webview:html": "parcel build ./src/webview/pug/index.pug --out-dir ./media",
+        "compile:webview:css": "parcel build ./src/webview/scss/main.scss --out-dir ./media",
+        "compile:webview:js": "parcel build ./src/webview/ts/main.ts --out-dir ./media --target browser",
         "lint": "eslint src --ext ts",
         "watch": "npm-run-all --parallel watch:ext watch:webview",
         "watch:ext": "tsc -watch -p ./",
         "watch:webview": "npm-run-all --parallel watch:webview:html watch:webview:css watch:webview:js",
         "watch:webview:html": "parcel watch ./src/webview/pug/index.pug --out-dir ./media",
         "watch:webview:css": "parcel watch ./src/webview/scss/main.scss --out-dir ./media",
-        "watch:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target electron"
+        "watch:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target browser --no-hmr --no-autoinstall"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
