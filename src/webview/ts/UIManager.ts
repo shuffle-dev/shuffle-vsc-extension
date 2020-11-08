@@ -1,38 +1,41 @@
-import ConfigService, {Config} from './ConfigService';
+import StateService from './StateService';
 import getVscApi from "./utils/getVscApi";
 
 export default class UIManager {
     private readonly _selectContainer: HTMLDivElement | null;
     private _select: HTMLSelectElement | null = null;
     private readonly _componentsContainer: HTMLDivElement | null;
-    private _configService: ConfigService;
+    private _stateService: StateService;
 
-    constructor(configService: ConfigService) {
-        this._configService = configService;
-        this._selectContainer = document.querySelector<HTMLDivElement>('.select-container');
-        this._componentsContainer = document.querySelector<HTMLDivElement>('.components-container');
+    constructor(configService: StateService) {
+        this._stateService = configService;
+        this._selectContainer = document.querySelector<HTMLDivElement>('#selectContainer');
+        this._componentsContainer = document.querySelector<HTMLDivElement>('#componentsContainer');
         this._componentsContainer?.addEventListener('click', this._handleComponentClick);
-    }
 
-    createStructure = (config: Config) => {
-        this._createSelect(config);
-        this._createComponents(config);
+        this.createStructure();
     };
 
-    private _createSelect = (config: Config) => {
+    private createStructure = () => {
+        this._createSelect();
+        this._createComponents();
+    };
+
+    private _createSelect = () => {
         this._clearSelect();
         this._select = document.createElement('select');
         this._select.addEventListener('change', this._handleSelectChange);
-        this._createSelectOptions(config);
+        this._createSelectOptions();
         this._selectContainer?.appendChild(this._select);
     };
 
-    private _createSelectOptions = (config: Config) => {
-        Object.keys(config.data).forEach((category) => {
+    private _createSelectOptions = () => {
+        const currentCategory = this._stateService.getCategory();
+        const categories = this._stateService.getCategories();
+        categories.forEach((category) => {
             const option = document.createElement('option');
             option.setAttribute('value', category);
             option.innerText = category;
-            const currentCategory = this._configService.getCurrentCategory();
             if (category === currentCategory) {
                 option.selected = true;
             }
@@ -43,13 +46,15 @@ export default class UIManager {
 
     private _handleSelectChange = (e: Event) => {
         const category = (e.target as HTMLInputElement).value;
-        this._configService.changeCategory(category);
+        this._stateService.changeCategory(category);
+        this._createComponents();
     };
 
-    private _createComponents = (config: Config) => {
+    private _createComponents = () => {
         this._clearComponents();
 
-        config.data[config.category].map((component) => {
+        const components = this._stateService.getComponents();
+        components.map((component) => {
             const elem = document.createElement('img');
             elem.setAttribute('src', `https://tailwind.build/${component.preview}`);
             elem.setAttribute('data-id', component.id);
@@ -68,7 +73,7 @@ export default class UIManager {
         if(id === null) {
             return;
         }
-        const component = this._configService.getComponent(id);
+        const component = this._stateService.getComponent(id);
         if (component === null) {
             return;
         }

@@ -6,12 +6,12 @@ type Listener = {
 };
 
 export default class MessageManager {
-    private _listeners: Listener[] = [];
+    private static _LISTENERS: Listener[] = [];
 
-    constructor() {
+    static init() {
         window.addEventListener('message', (event) => {
             const message = event.data;
-            this._listeners.forEach((listener) => {
+            MessageManager._LISTENERS.forEach((listener) => {
                 if (listener.type === message.type) {
                     listener.fun(message);
                 }
@@ -19,8 +19,8 @@ export default class MessageManager {
         });
     };
 
-    addListener = (type: string, fun: (message: string) => void) => {
-        this._listeners.push({
+    static on = (type: string, fun: (message: string) => void) => {
+        MessageManager._LISTENERS.push({
            type,
            fun
        });

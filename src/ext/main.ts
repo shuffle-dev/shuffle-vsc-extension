@@ -1,6 +1,7 @@
+import { readFileSync } from 'fs'
 import * as vscode from 'vscode';
 import fetch from 'node-fetch';
-import {writeSync as writeSyncToClipboard} from 'clipboardy';
+import { writeSync as writeSyncToClipboard } from 'clipboardy';
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -84,11 +85,13 @@ class ShufflePanel {
         const webview = this._panel.webview;
         const mediaPath = vscode.Uri.joinPath(this._extensionUri,  'media');
 
+        const htmlPath = vscode.Uri.joinPath(mediaPath, 'index.html');
         const scriptPath = vscode.Uri.joinPath(mediaPath, 'main.js');
         const stylePath = vscode.Uri.joinPath(mediaPath, 'main.css');
 
         const scriptUri = webview.asWebviewUri(scriptPath);
         const styleUri = webview.asWebviewUri(stylePath);
+        const htmlContent = readFileSync(htmlPath.fsPath);
 
         return (
             `<!DOCTYPE html>
@@ -106,10 +109,7 @@ class ShufflePanel {
 				<title>Shuffle</title>
 			</head>
 			<body>
-			    <main>
-                    <div class="select-container"></div>
-                    <div class="components-container"></div>
-                </main>
+			    ${htmlContent}
 			    <script nonce="${nonce}">
 			        window.vscApi = acquireVsCodeApi();
                 </script>
@@ -117,12 +117,10 @@ class ShufflePanel {
 			</body>
 			</html>`
         );
-    }
+    };
 
-    private _fetchConfig() {
-        const CONFIG_URL = 'https://tailwind.build/components/js/27db_components.js?v=mn20';
-
-        fetch(CONFIG_URL)
+    private _fetchConfig(url: string) {
+        fetch(url)
             .then((res) => res.text())
             .then(res => {
                 const firstEqualPosition = res.indexOf('=');
@@ -138,25 +136,25 @@ class ShufflePanel {
                 vscode.window.showErrorMessage("Shuffle: Cannot fetch config file");
                 console.error(e);
             });
-    }
+    };
 
     private _copyToClipboard(code: string) {
         writeSyncToClipboard(code);
         vscode.window.showInformationMessage("Copied to clipboard!");
-    }
+    };
 
     private _onReceiveMessage() {
         this._panel.webview.onDidReceiveMessage((message) => {
             switch (message.type) {
                 case 'config:req':
-                    this._fetchConfig();
+                    this._fetchConfig(message.url);
                     break;
                 case 'source:req':
                     this._copyToClipboard(message.data);
                     break;
             }
         });
-    }
+    };
 
     private _onChangeView() {
         this._panel.onDidChangeViewState(
@@ -168,11 +166,11 @@ class ShufflePanel {
             null,
             this._disposables
         );
-    }
+    };
 
     private _onDispose() {
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    }
+    };
 }
 
 function getNonce() {

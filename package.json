@@ -12,7 +12,7 @@
     "activationEvents": [
         "onCommand:shuffle.openWindow"
     ],
-    "main": "./out/extension.js",
+    "main": "./out/ext/main.js",
     "contributes": {
         "keybindings": {
             "key": "ctrl+d",

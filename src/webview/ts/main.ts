@@ -1,12 +1,12 @@
 import MessageManager from './MessageManager';
-import ConfigService from './ConfigService';
+import StateService from './StateService';
 import UIManager from "./UIManager";
+import StateProvider from "./StateProvider";
 
-const messageManager = new MessageManager();
-const configService = new ConfigService();
-const uiManager = new UIManager(configService);
+MessageManager.init();
+const stateProvider = new StateProvider((config) => {
+    const stateService = new StateService(config);
+    const uiManager = new UIManager(stateService);
+});
+stateProvider.load();
 
-configService.addListener(uiManager.createStructure);
-messageManager.addListener('config:res', configService.receiveConfig);
-
-configService.loadConfig();
