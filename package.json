@@ -10,7 +10,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:shuffle.openWindow"
+        "onCommand:shuffle.openWindow",
+        "onWebviewPanel:shuffle"
     ],
     "main": "./out/ext/main.js",
     "contributes": {

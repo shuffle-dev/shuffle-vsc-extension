@@ -1,5 +1,6 @@
 import StateService from './StateService';
-import getVscApi from "./utils/getVscApi";
+import { postMessage } from "./utils/getVscApi";
+import { Messages, SourceReqMessage } from "../../shared/Messages";
 
 export default class UIManager {
     private readonly _selectContainer: HTMLDivElement | null;
@@ -78,10 +79,10 @@ export default class UIManager {
             return;
         }
 
-        getVscApi().postMessage({
-           type: 'source:req',
+        postMessage({
+           type: Messages.SOURCE_REQ,
            data: component.html
-       });
+       } as SourceReqMessage);
     };
 
     private _clearSelect = () => {

@@ -1,16 +1,8 @@
 import getVscApi from "./utils/getVscApi";
 import { State } from "./StateProvider";
-import {Builders} from "../../shared/Builders";
+import { Builders } from "../../shared/Builders";
+import { Component } from "../../shared/Types";
 
-export type Component = {
-    id: string,
-    preview: string,
-    html: string,
-    config: object[]
-};
-export type Config = {
-    [key: string]: Component[]
-};
 
 export default class StateService {
     private _state: State;

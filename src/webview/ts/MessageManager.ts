@@ -1,25 +1,18 @@
-type Type = string;
-type Callback = (message: any) => void;
-type Listener = {
-    type: Type,
-    fun: Callback
-};
+import { MessageListener } from '../../shared/Types';
+import { Message, Messages } from "../../shared/Messages";
 
 export default class MessageManager {
-    private static _LISTENERS: Listener[] = [];
+    private static _LISTENERS: MessageListener[] = [];
 
     static init() {
-        window.addEventListener('message', (event) => {
-            const message = event.data;
-            MessageManager._LISTENERS.forEach((listener) => {
-                if (listener.type === message.type) {
-                    listener.fun(message);
-                }
-            });
+        window.addEventListener('message', ({ data }) => {
+            MessageManager._LISTENERS
+                .filter(({ type }) => data.type === type)
+                .forEach(({ fun }) => fun(data));
         });
     };
 
-    static on = (type: string, fun: (message: string) => void) => {
+    static on = (type: Messages, fun: (message: Message) => void) => {
         MessageManager._LISTENERS.push({
            type,
            fun

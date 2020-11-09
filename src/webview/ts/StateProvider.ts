@@ -1,7 +1,8 @@
 import getVscApi from "./utils/getVscApi";
 import { Builders, BuilderType } from "../../shared/Builders";
 import MessageManager from "./MessageManager";
-import { Config } from "./StateService";
+import { Config } from "../../shared/Types";
+import { Messages } from "../../shared/Messages";
 
 export type State = {
     key: string,
@@ -11,11 +12,11 @@ export type State = {
 };
 
 export default class StateProvider {
-    private _onChangeListener: (config: State) => void = () => {};
+    private readonly _onChangeListener: (config: State) => void;
 
     constructor(onChange: (config: State) => void) {
-        MessageManager.on('config:res', this.receiveConfig);
         this._onChangeListener = onChange;
+        MessageManager.on(Messages.CONFIG_RES, this.receiveConfig);
     }
 
     load = () => {
@@ -29,8 +30,7 @@ export default class StateProvider {
     };
 
     private _isAlreadyFetched = () => {
-        // eslint-disable-next-line eqeqeq
-        return getVscApi().getState() != null;
+        return getVscApi().getState() !== undefined;
     };
 
     private _reqForConfig = () => {
