@@ -1,14 +1,18 @@
-import getVscApi from "./utils/getVscApi";
+import VscApi from "./utils/VscApi";
 import { Builders, BuilderType } from "../../shared/Builders";
 import MessageManager from "./MessageManager";
 import { Config } from "../../shared/Types";
-import { Messages } from "../../shared/Messages";
+import { ConfigReqMessage, ConfigResMessage, Message, Messages } from "../../shared/Messages";
 
-export type State = {
+type IState = { [index: string]: any };
+export type State = IState & {
     key: string,
     builder: BuilderType,
     category: string,
     config: Config,
+};
+export type PartialState = {
+    [T in keyof State]?: State[T]
 };
 
 export default class StateProvider {
@@ -25,34 +29,35 @@ export default class StateProvider {
             return;
         }
 
-        const state = getVscApi().getState();
+        const state = VscApi.getState() as State;
         this._onChangeListener(state);
     };
 
     private _isAlreadyFetched = () => {
-        return getVscApi().getState() !== undefined;
+        return VscApi.getState() !== undefined;
     };
 
     private _reqForConfig = () => {
-        getVscApi().postMessage({
-            type: 'config:req',
+        VscApi.postMessage({
+            type: Messages.CONFIG_REQ,
             url: Builders.getDefault().url
-        });
+        } as ConfigReqMessage);
     };
 
-    private receiveConfig = (message: any) => {
-        const config = message.data;
-        const key = '';
-        const category = Object.keys(config)[0];
-        const builder = Builders.getDefault();
+    private receiveConfig = (message: Message) => {
+        const { data } = message as ConfigResMessage;
+        const currentState = VscApi.getState();
 
-        const state: State = {
-            builder,
-            category,
-            config,
-            key
-        };
-        getVscApi().setState(state);
+        const state: State = currentState === undefined ? ({
+            config: data,
+            key: '',
+            category: Object.keys(data)[0],
+            builder: Builders.getDefault(),
+        }) : ({
+            ...currentState,
+            config: data,
+        });
+        VscApi.setState(state);
         this._onChangeListener(state);
     };
 

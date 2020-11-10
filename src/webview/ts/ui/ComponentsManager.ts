@@ -1,36 +1,37 @@
-import StateService from './StateService';
-import { postMessage } from "./utils/getVscApi";
-import { Messages, SourceReqMessage } from "../../shared/Messages";
+import StateService from "../StateService";
+import VscApi from "../utils/VscApi";
+import { Messages, SourceReqMessage } from "../../../shared/Messages";
 
-export default class UIManager {
+export default class ComponentsManager {
     private readonly _selectContainer: HTMLDivElement | null;
-    private _select: HTMLSelectElement | null = null;
     private readonly _componentsContainer: HTMLDivElement | null;
+
     private _stateService: StateService;
 
     constructor(configService: StateService) {
         this._stateService = configService;
         this._selectContainer = document.querySelector<HTMLDivElement>('#selectContainer');
         this._componentsContainer = document.querySelector<HTMLDivElement>('#componentsContainer');
-        this._componentsContainer?.addEventListener('click', this._handleComponentClick);
-
-        this.createStructure();
     };
 
-    private createStructure = () => {
+    public bindEvents = () => {
+        this._componentsContainer?.addEventListener('click', this._handleComponentClick);
+    };
+
+    public createStructure = () => {
         this._createSelect();
         this._createComponents();
     };
 
     private _createSelect = () => {
         this._clearSelect();
-        this._select = document.createElement('select');
-        this._select.addEventListener('change', this._handleSelectChange);
-        this._createSelectOptions();
-        this._selectContainer?.appendChild(this._select);
+        const select = document.createElement('select');
+        select.addEventListener('change', this._handleSelectChange);
+        this._createSelectOptions(select);
+        this._selectContainer?.appendChild(select);
     };
 
-    private _createSelectOptions = () => {
+    private _createSelectOptions = (select: HTMLSelectElement) => {
         const currentCategory = this._stateService.getCategory();
         const categories = this._stateService.getCategories();
         categories.forEach((category) => {
@@ -41,7 +42,7 @@ export default class UIManager {
                 option.selected = true;
             }
 
-            this._select?.appendChild(option);
+            select.appendChild(option);
         });
     };
 
@@ -64,6 +65,18 @@ export default class UIManager {
         });
     };
 
+    private _clearSelect = () => {
+        if(this._selectContainer !== null) {
+            this._selectContainer.innerHTML = '';
+        }
+    };
+
+    private _clearComponents = () => {
+        if(this._componentsContainer !== null) {
+            this._componentsContainer.innerHTML = '';
+        }
+    };
+
     private _handleComponentClick = (e: MouseEvent) => {
         const target = e.target as HTMLImageElement;
         if(target.tagName.toUpperCase() !== 'IMG') {
@@ -79,21 +92,9 @@ export default class UIManager {
             return;
         }
 
-        postMessage({
-           type: Messages.SOURCE_REQ,
-           data: component.html
-       } as SourceReqMessage);
-    };
-
-    private _clearSelect = () => {
-        if(this._selectContainer !== null) {
-            this._selectContainer.innerHTML = '';
-        }
-    };
-
-    private _clearComponents = () => {
-        if(this._componentsContainer !== null) {
-            this._componentsContainer.innerHTML = '';
-        }
+        VscApi.postMessage({
+            type: Messages.SOURCE_REQ,
+            data: component.html
+        } as SourceReqMessage);
     };
 }

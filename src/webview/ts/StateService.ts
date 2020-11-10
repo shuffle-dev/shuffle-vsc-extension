@@ -1,7 +1,8 @@
-import getVscApi from "./utils/getVscApi";
-import { State } from "./StateProvider";
-import { Builders } from "../../shared/Builders";
-import { Component } from "../../shared/Types";
+import VscApi from "./utils/VscApi";
+import {PartialState, State} from "./StateProvider";
+import {Builders} from "../../shared/Builders";
+import {Component} from "../../shared/Types";
+import {ConfigReqMessage, Messages} from "../../shared/Messages";
 
 
 export default class StateService {
@@ -11,67 +12,63 @@ export default class StateService {
         this._state = state;
     }
 
-    changeCategory = (category: string) => {
-        const state = this._state;
-        this._setState({
-            ...state,
-            category,
-        });
+    public changeCategory = (category: string) => {
+        this._changeState({ category });
     };
 
-    changeKey = (key: string) => {
-        const state = this._state;
-        this._setState({
-            ...state,
-            key,
-        });
-        // @ToDo load new config from node
+    public changeKey = (key: string) => {
+        this._changeState({ key });
     };
 
-    changeBuilder = (key: string) => {
+    public changeBuilder = (key: string) => {
         const builder = Builders.getBuilder(key);
         if (builder === undefined) {
             return;
         }
 
-        const state = this._state;
-        this._setState({
-            ...state,
-            builder,
-        });
-        // @ToDo load new config from node
+        this._changeState({ builder });
     };
 
-    getComponents = (category?: string): Component[] => {
+    public getComponents = (category?: string): Component[] => {
         const findingCategory = category === undefined ? this.getCategory() : category;
         const components = this._state.config[findingCategory];
         return components === undefined ? [] : components;
     };
 
-    getComponent = (id: string, category?: string): Component | null => {
+    public getComponent = (id: string, category?: string): Component | null => {
         const components = this.getComponents(category);
         const component = components.find((elem) => elem.id === id);
         return component ? component : null;
     };
 
-    getCategories = () => {
+    public getCategories = () => {
         return Object.keys(this._state.config);
     };
 
-    getCategory = () => {
+    public getCategory = () => {
         return this._state.category;
     };
 
-    getKey = () => {
+    public getKey = () => {
         return this._state.key;
     };
 
-    getBuilder = () => {
+    public getBuilder = () => {
         return this._state.builder;
     };
 
-    private _setState = (state: State) => {
-        getVscApi().setState(state);
-        this._state = state;
+    private _changeState = (state: PartialState) => {
+        VscApi.changeState(state);
+        this._state = VscApi.getState() as State;
+    };
+
+    public fetchConfig = () => {
+        const { builder, key } = this._state;
+        // @ToDo change to create url with key
+        const url = builder.url;
+        VscApi.postMessage({
+            type: Messages.CONFIG_REQ,
+            url,
+        } as ConfigReqMessage);
     };
 }
