@@ -12,6 +12,8 @@ export default class HeaderManager {
         this._buildersContainer = document.querySelector<HTMLDivElement>('#buildersContainer');
         this._keyInput = document.querySelector<HTMLInputElement>('#keyInput');
         this._keyButton = document.querySelector<HTMLButtonElement>('#keyButton');
+
+        this._setCurrentBuilderActive();
     };
 
     public bindEvents = () => {
@@ -32,6 +34,20 @@ export default class HeaderManager {
         }
         this._stateService.changeBuilder(key);
         this._stateService.fetchConfig();
+        this._setCurrentBuilderActive();
+    };
+
+    private _setCurrentBuilderActive = () => {
+      const builders = this._buildersContainer?.querySelectorAll("button[data-key]");
+      if(builders === undefined) {
+          return;
+      }
+
+      builders.forEach(item => item.classList.remove('active'));
+      const builder = this._stateService.getBuilder();
+      Array.from(builders)
+          .find(item => item.getAttribute('data-key') === builder.key)
+          ?.classList.add("active");
     };
 
     private _handleFetchButtonClick = () => {
