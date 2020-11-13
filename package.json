@@ -1,8 +1,8 @@
 {
-    "name": "shuffle",
-    "displayName": "shuffle-ext",
-    "description": "",
-    "version": "0.0.1",
+    "name": "shuffle.dev",
+    "displayName": "shuffle.dev",
+    "description": "Use Shuffle.dev UI components from within the Visual Studio Code editor.",
+    "version": "1.0.0",
     "engines": {
         "vscode": "^1.50.0"
     },
@@ -22,7 +22,7 @@
         "commands": [
             {
                 "command": "shuffle.openWindow",
-                "title": "Shuffle builder: Open shuffle builder window"
+                "title": "Shuffle: Open the Shuffle components library."
             }
         ]
     },

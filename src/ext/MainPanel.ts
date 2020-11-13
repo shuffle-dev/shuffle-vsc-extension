@@ -4,7 +4,7 @@ import MessageManager from "./MessageManager";
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
-    public static readonly viewType = 'shuffle';
+    public static readonly viewType = 'Shuffle.dev';
 
     public readonly panel: vscode.WebviewPanel;
     public readonly context: vscode.ExtensionContext;
@@ -31,7 +31,7 @@ export default class MainPanel {
         }
 
         const panel = vscode.window.createWebviewPanel(
-            MainPanel.viewType, 'Shuffle', column, {
+            MainPanel.viewType, 'Shuffle.dev', column, {
                 enableScripts: true,
                 retainContextWhenHidden: true,
                 localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'media')]

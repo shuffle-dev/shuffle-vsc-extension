@@ -3,7 +3,6 @@ import { Config } from "./Types";
 export enum Messages {
     CONFIG_REQ = 'config:req',
     CONFIG_RES = 'config:res',
-
     SOURCE_REQ = 'source:req',
 }
 

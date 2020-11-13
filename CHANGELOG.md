@@ -1,9 +1,3 @@
-# Change Log
+### 1.0.0
 
-All notable changes to the "shuffle-ext" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- Initial release an extension that's connect Shuffle.dev editors with VSC.
