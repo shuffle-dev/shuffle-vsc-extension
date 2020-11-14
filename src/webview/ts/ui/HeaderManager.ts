@@ -23,15 +23,17 @@ export default class HeaderManager {
 
     private _handleBuilderChange = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
-        const button = target.closest("button[data-key]");
-        if(button === null) {
+        const button = target.closest('button[data-key]');
+
+        if (button === null) {
             return;
         }
 
         const key = button.getAttribute('data-key');
-        if(key === null) {
+        if (key === null) {
             return;
         }
+
         this._stateService.changeBuilder(key);
         this._stateService.fetchConfig();
         this._setCurrentBuilderActive();
@@ -39,7 +41,8 @@ export default class HeaderManager {
 
     private _setCurrentBuilderActive = () => {
       const builders = this._buildersContainer?.querySelectorAll("button[data-key]");
-      if(builders === undefined) {
+
+      if(!builders) {
           return;
       }
 
@@ -47,11 +50,12 @@ export default class HeaderManager {
       const builder = this._stateService.getBuilder();
       Array.from(builders)
           .find(item => item.getAttribute('data-key') === builder.key)
-          ?.classList.add("active");
+          ?.classList.add('active');
     };
 
     private _handleFetchButtonClick = () => {
         const key = this._keyInput?.value;
+
         if (key === undefined) {
             return;
         }

@@ -57,6 +57,7 @@ export default class StateProvider {
             ...currentState,
             config: data,
         });
+
         VscApi.setState(state);
         this._onChangeListener(state);
     };

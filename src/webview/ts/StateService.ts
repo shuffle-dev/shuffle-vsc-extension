@@ -65,6 +65,9 @@ export default class StateService {
         const { builder, key } = this._state;
         // @ToDo change to create url with key
         const url = builder.url;
+
+        console.log(url);
+        
         VscApi.postMessage({
             type: Messages.CONFIG_REQ,
             url,

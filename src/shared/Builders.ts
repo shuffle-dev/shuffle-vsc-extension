@@ -8,22 +8,25 @@ export class Builders {
     static readonly TAILWIND: BuilderType = {
         name: 'Tailwind Builder',
         key: 'tailwind',
-        url: 'https://tailwind.build/components/js/27db_components.js?v=mn20'
+        url: 'https://tailwind.build/components/js/27db_components.js?v=tailwind-mn20'
     };
+
     static readonly BOOTSTRAP: BuilderType = {
         name: 'Bootstrap Shuffle',
         key: 'bootstrap',
-        url: 'https://tailwind.build/components/js/27db_components.js?v=mn20'
+        url: 'https://tailwind.build/components/js/27db_components.js?v=boot-mn20'
     };
+
     static readonly BULMA: BuilderType = {
         name: 'Bulma Builder',
         key: 'bulma',
-        url: 'https://tailwind.build/components/js/27db_components.js?v=mn20'
+        url: 'https://tailwind.build/components/js/27db_components.js?v=bulma-mn20'
     };
+
     static readonly MATERIAL: BuilderType = {
         name: 'Material-UI Builder',
         key: 'material',
-        url: 'https://tailwind.build/components/js/27db_components.js?v=mn20'
+        url: 'https://tailwind.build/components/js/27db_components.js?v=mui-n20'
     };
 
     static getBuilders = (): BuilderType[] => {

@@ -1,5 +1,5 @@
-section
-    p This is a DEMO version. You need to create a full account in one of our visual editors:
+div.settings
+    p This is a #[span.text-warning DEMO version]. You need to create a full account to use all UI components. You can do it in any of our editors:
     ul
         li
             a(href="https://tailwind.build") Tailwind Builder
@@ -10,8 +10,13 @@ section
         li
             a(href="https://mui.dev") Material-UI Builder
 
-    p After creating the account, go to Account -> API Settings and paste your API key below:
+    p After creating the account, please visit "Account → VSC Extension" and paste your API details below.
 
-    label(for="keyInput") API Key:
-    input#keyInput(type="text")
-    button#keyButton Fetch all components
+    .control
+        label(for="emailInput") E-mail:
+        input#emailInput(type="text")
+    .control
+        label(for="keyInput") API Key:
+        input#keyInput(type="text")
+
+    button#keyButton Save &amp; fetch all components
