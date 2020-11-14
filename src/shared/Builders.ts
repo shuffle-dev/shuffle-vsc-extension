@@ -14,7 +14,7 @@ export class Builders {
     static readonly BOOTSTRAP: BuilderType = {
         name: 'Bootstrap Shuffle',
         key: 'bootstrap',
-        url: 'https://tailwind.build/components/js/27db_components.js?v=boot-mn20'
+        url: 'https://bootstrapshuffle.com/components/js/ba7b_components.js?v=mn20'
     };
 
     static readonly BULMA: BuilderType = {
