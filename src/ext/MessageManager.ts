@@ -31,8 +31,6 @@ export default class MessageManager {
     private _fetchConfig = (message: Message) => {
         const { url } = message as ConfigReqMessage;
 
-        console.log('AAA' + url);
-
         fetch(url)
             .then((res) => res.text())
             .then(res => {

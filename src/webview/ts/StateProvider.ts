@@ -1,8 +1,8 @@
-import VscApi from "./utils/VscApi";
-import { Builders, BuilderType } from "../../shared/Builders";
-import MessageManager from "./MessageManager";
-import { Config } from "../../shared/Types";
-import { ConfigReqMessage, ConfigResMessage, Message, Messages } from "../../shared/Messages";
+import VscApi from './utils/VscApi';
+import { Builders, BuilderType } from '../../shared/Builders';
+import MessageManager from './MessageManager';
+import { Config } from '../../shared/Types';
+import { ConfigReqMessage, ConfigResMessage, Message, Messages } from '../../shared/Messages';
 
 type IState = { [index: string]: any };
 export type State = IState & {

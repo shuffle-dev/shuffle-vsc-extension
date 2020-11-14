@@ -1,5 +1,6 @@
 .component-img {
-    width: 100%;
+    max-width: 100%;
     max-height: 100%;
-    padding: 20px 10px;
+    margin: 1rem auto 0 auto;
+    cursor: pointer;
 }

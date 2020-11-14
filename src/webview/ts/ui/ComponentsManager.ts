@@ -60,7 +60,9 @@ export default class ComponentsManager {
             const elem = document.createElement('img');
             elem.setAttribute('src', `https://tailwind.build/${component.preview}`);
             elem.setAttribute('data-id', component.id);
+            elem.classList.add('component-img');
 
+            
             this._componentsContainer?.appendChild(elem);
         });
     };
@@ -87,6 +89,7 @@ export default class ComponentsManager {
         if(id === null) {
             return;
         }
+
         const component = this._stateService.getComponent(id);
         if (component === null) {
             return;

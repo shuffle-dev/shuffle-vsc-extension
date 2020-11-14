@@ -1,16 +1,14 @@
 import StateService from '../StateService';
-import HeaderManager from "./HeaderManager";
-import ComponentsManager from "./ComponentsManager";
+import HeaderManager from './HeaderManager';
+import ComponentsManager from './ComponentsManager';
 
 export default class UIManager {
-    private static _IS_INITIALIZED = false;
+    private static _isInitialized = false;
 
-    private _stateService: StateService;
     private _headerManager: HeaderManager;
     private _componentsManager: ComponentsManager;
 
     constructor(configService: StateService) {
-        this._stateService = configService;
         this._headerManager = new HeaderManager(configService);
         this._componentsManager = new ComponentsManager(configService);
 
@@ -23,9 +21,9 @@ export default class UIManager {
     };
 
     private _runOnce = (callback: () => void) => {
-        if (!UIManager._IS_INITIALIZED) {
+        if (!UIManager._isInitialized) {
             callback();
-            UIManager._IS_INITIALIZED = true;
+            UIManager._isInitialized = true;
         }
     };
 }

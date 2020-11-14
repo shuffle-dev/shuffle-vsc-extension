@@ -26,6 +26,7 @@ export default class MainPanel {
         const column = vscode.ViewColumn.Beside;
 
         if (MainPanel.currentPanel) {
+            MainPanel.currentPanel.hide();
             return;
         }
 
@@ -46,6 +47,10 @@ export default class MainPanel {
         MainPanel.currentPanel = new MainPanel(panel, context);
     }
 
+    public hide() {
+        this.panel.dispose();
+    }
+
     private _createPanel() {
         const webview = this.panel.webview;
         const mediaPath = vscode.Uri.joinPath(this.context.extensionUri,  'media');
@@ -64,7 +69,7 @@ export default class MainPanel {
             <head>
                 <meta charset="UTF-8">
                 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource};
-                    img-src ${webview.cspSource} https:; script-src ${webview.cspSource};">
+                    img-src ${webview.cspSource} https:; script-src ${webview.cspSource} https:;">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
                 <link href="${styleUri}" rel="stylesheet">
