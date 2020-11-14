@@ -11,6 +11,7 @@ export type State = IState & {
     category: string,
     config: Config,
 };
+
 export type PartialState = {
     [T in keyof State]?: State[T]
 };
@@ -25,7 +26,7 @@ export default class StateProvider {
 
     load = () => {
         if (!this._isAlreadyFetched()) {
-            this._reqForConfig();
+            this._requestForConfig();
             return;
         }
 
@@ -37,7 +38,7 @@ export default class StateProvider {
         return VscApi.getState() !== undefined;
     };
 
-    private _reqForConfig = () => {
+    private _requestForConfig = () => {
         VscApi.postMessage({
             type: Messages.CONFIG_REQUEST,
             url: Builders.getDefault().url
@@ -61,5 +62,4 @@ export default class StateProvider {
         VscApi.setState(state);
         this._onChangeListener(state);
     };
-
 }
