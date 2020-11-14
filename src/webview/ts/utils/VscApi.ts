@@ -1,5 +1,5 @@
-import { Message } from "../../../shared/Messages";
-import { State, PartialState } from "../StateProvider";
+import { Message } from '../../../shared/Messages';
+import { State, PartialState } from '../StateProvider';
 
 declare global {
     interface Window {

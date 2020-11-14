@@ -1,9 +1,9 @@
-import MainPanel from "./MainPanel";
-import fetch from "node-fetch";
-import * as vscode from "vscode";
-import { writeSync as writeSyncToClipboard } from "clipboardy";
-import { ConfigReqMessage, ConfigResMessage, Message, Messages, SourceReqMessage } from "../shared/Messages";
-import { MessageListener } from "../shared/Types";
+import * as vscode from 'vscode';
+import fetch from 'node-fetch';
+import { writeSync as writeSyncToClipboard } from 'clipboardy';
+import MainPanel from './MainPanel';
+import { ConfigReqMessage, ConfigResMessage, Message, Messages, SourceReqMessage } from '../shared/Messages';
+import { MessageListener } from '../shared/Types';
 
 export default class MessageManager {
     private readonly mainPanel: MainPanel;
@@ -18,7 +18,6 @@ export default class MessageManager {
     }
 
     public receiveMessage = (message: Message) => {
-        console.log(message);
         this._listeners
             .filter(({ type }) => message.type === type)
             .forEach(({ fun }) => fun(message));

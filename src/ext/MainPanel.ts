@@ -40,15 +40,17 @@ export default class MainPanel {
             MainPanel.viewType, 'Shuffle.dev', column, panelOptions,
         );
 
-        MainPanel.revive(panel, context);
+        MainPanel.attachCurrentPanel(panel, context);
     }
 
-    public static revive(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
+    public static attachCurrentPanel(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
         MainPanel.currentPanel = new MainPanel(panel, context);
     }
 
     public hide() {
+        MainPanel.currentPanel = undefined;
         this.panel.dispose();
+        this._disposables.forEach(item => item.dispose());
     }
 
     private _createPanel() {

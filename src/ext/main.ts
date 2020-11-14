@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (vscode.window.registerWebviewPanelSerializer) {
         vscode.window.registerWebviewPanelSerializer(MainPanel.viewType, {
             async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel) {
-                MainPanel.revive(webviewPanel, context);
+                MainPanel.attachCurrentPanel(webviewPanel, context);
             }
         });
     }

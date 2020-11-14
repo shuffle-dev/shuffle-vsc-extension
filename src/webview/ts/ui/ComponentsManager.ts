@@ -1,6 +1,6 @@
-import StateService from "../StateService";
-import VscApi from "../utils/VscApi";
-import { Messages, SourceReqMessage } from "../../../shared/Messages";
+import StateService from '../StateService';
+import VscApi from '../utils/VscApi';
+import { Messages, SourceReqMessage } from '../../../shared/Messages';
 
 export default class ComponentsManager {
     private readonly _selectContainer: HTMLDivElement | null;
@@ -62,7 +62,6 @@ export default class ComponentsManager {
             elem.setAttribute('data-id', component.id);
             elem.classList.add('component-img');
 
-            
             this._componentsContainer?.appendChild(elem);
         });
     };

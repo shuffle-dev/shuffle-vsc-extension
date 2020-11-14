@@ -1,4 +1,4 @@
-import StateService from "../StateService";
+import StateService from '../StateService';
 
 export default class HeaderManager {
     private readonly _buildersContainer: HTMLDivElement | null;
