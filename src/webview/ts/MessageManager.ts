@@ -1,5 +1,5 @@
 import { MessageListener } from '../../shared/Types';
-import { Message, Messages } from "../../shared/Messages";
+import { Message, Messages } from '../../shared/Messages';
 
 export default class MessageManager {
     private static _listeners: MessageListener[] = [];

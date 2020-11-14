@@ -12,11 +12,12 @@ div.settings
 
     p After creating the account, please visit "Account → VSC Extension" and paste your API details below.
 
-    .control
-        label(for="emailInput") E-mail:
-        input#emailInput(type="text")
-    .control
-        label(for="keyInput") API Key:
-        input#keyInput(type="text")
+    .form
+        .control
+            label(for="emailInput") E-mail:
+            input#emailInput(type="text")
+        .control
+            label(for="keyInput") API Key:
+            input#keyInput(type="text")
 
-    button#keyButton Save &amp; fetch all components
+        button#keyButton Save &amp; fetch all components

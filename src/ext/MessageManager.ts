@@ -18,6 +18,10 @@ export default class MessageManager {
     }
 
     public receiveMessage = (message: Message) => {
+        console.log('---');
+        console.log(message);
+        console.log('---');
+
         this._listeners
             .filter(({ type }) => message.type === type)
             .forEach(({ fun }) => fun(message));
