@@ -1,6 +1,7 @@
 {
-    "name": "shuffle.dev",
-    "displayName": "shuffle.dev",
+    "name": "shuffle-dev",
+    "displayName": "Shuffle.dev",
+    "publisher": "shuffle-dev",
     "description": "Use Shuffle.dev UI components from within the Visual Studio Code editor.",
     "version": "1.0.0",
     "engines": {

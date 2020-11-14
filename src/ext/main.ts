@@ -5,6 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('shuffle.openWindow', () => {
         MainPanel.createOrShow(context);
     });
+
     context.subscriptions.push(disposable);
 
     if (vscode.window.registerWebviewPanelSerializer) {

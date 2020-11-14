@@ -4,10 +4,11 @@ import MessageManager from "./MessageManager";
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
-    public static readonly viewType = 'Shuffle.dev';
+    public static readonly viewType = 'shuffle';
 
     public readonly panel: vscode.WebviewPanel;
     public readonly context: vscode.ExtensionContext;
+
     private readonly _messageManager: MessageManager;
     private _disposables: vscode.Disposable[] = [];
 
@@ -18,7 +19,6 @@ export default class MainPanel {
 
         this._createPanel();
         this._onReceiveMessage();
-        this._onChangeView();
         this._onDispose();
     }
 
@@ -26,16 +26,17 @@ export default class MainPanel {
         const column = vscode.ViewColumn.Beside;
 
         if (MainPanel.currentPanel) {
-            MainPanel.currentPanel.panel.reveal(column);
             return;
         }
 
+        const panelOptions = {
+            enableScripts: true,
+            retainContextWhenHidden: true,
+            localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'media')]
+        };
+
         const panel = vscode.window.createWebviewPanel(
-            MainPanel.viewType, 'Shuffle.dev', column, {
-                enableScripts: true,
-                retainContextWhenHidden: true,
-                localResourceRoots: [vscode.Uri.joinPath(context.extensionUri, 'media')]
-            }
+            MainPanel.viewType, 'Shuffle.dev', column, panelOptions,
         );
 
         MainPanel.revive(panel, context);
@@ -44,29 +45,6 @@ export default class MainPanel {
     public static revive(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
         MainPanel.currentPanel = new MainPanel(panel, context);
     }
-
-    private _dispose() {
-        MainPanel.currentPanel = undefined;
-        this.panel.dispose();
-        this._disposables.forEach(item => item.dispose());
-    }
-
-    private _onReceiveMessage() {
-        this.panel.webview.onDidReceiveMessage(this._messageManager.receiveMessage, null, this._disposables);
-    };
-
-    private _onChangeView() {
-        const listener = () => {
-            if (this.panel.visible) {
-                this._createPanel();
-            }
-        };
-        this.panel.onDidChangeViewState(listener, null, this._disposables);
-    };
-
-    private _onDispose() {
-        this.panel.onDidDispose(() => this._dispose(), null, this._disposables);
-    };
 
     private _createPanel() {
         const webview = this.panel.webview;
@@ -82,21 +60,35 @@ export default class MainPanel {
 
         this.panel.webview.html = (
             `<!DOCTYPE html>
-		    <html lang="en">
+            <html lang="en">
             <head>
                 <meta charset="UTF-8">
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource};
-				    img-src ${webview.cspSource} https:; script-src ${webview.cspSource};">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource};
+                    img-src ${webview.cspSource} https:; script-src ${webview.cspSource};">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-				<link href="${styleUri}" rel="stylesheet">
-				<title>Shuffle</title>
-			</head>
-			<body>
-			    ${htmlContent}
-				<script src="${scriptUri}"></script>
-			</body>
-			</html>`
+                <link href="${styleUri}" rel="stylesheet">
+                <title>Shuffle</title>
+            </head>
+            <body>
+                ${htmlContent}
+                <script src="${scriptUri}"></script>
+            </body>
+            </html>`
         );
     }
+
+    private _onReceiveMessage() {
+        this.panel.webview.onDidReceiveMessage(this._messageManager.receiveMessage, null, this._disposables);
+    };
+
+    private _onDispose() {
+        const listener = () => {
+            MainPanel.currentPanel = undefined;
+            this.panel.dispose();
+            this._disposables.forEach(item => item.dispose());
+        };
+    
+        this.panel.onDidDispose(listener, null, this._disposables);
+    };
 }

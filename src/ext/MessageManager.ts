@@ -18,6 +18,7 @@ export default class MessageManager {
     }
 
     public receiveMessage = (message: Message) => {
+        console.log(message);
         this._listeners
             .filter(({ type }) => message.type === type)
             .forEach(({ fun }) => fun(message));
@@ -29,6 +30,9 @@ export default class MessageManager {
 
     private _fetchConfig = (message: Message) => {
         const { url } = message as ConfigReqMessage;
+
+        console.log('AAA' + url);
+
         fetch(url)
             .then((res) => res.text())
             .then(res => {
