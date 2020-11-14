@@ -1,26 +1,26 @@
 import { Config } from "./Types";
 
 export enum Messages {
-    CONFIG_REQ = 'config:req',
-    CONFIG_RES = 'config:res',
-    SOURCE_REQ = 'source:req',
+    CONFIG_REQUEST = 'config:reqquest',
+    CONFIG_RESPONSE = 'config:response',
+    SOURCE_REQUEST = 'source:reqquest',
 }
 
 export interface Message {
     type: Messages
 }
 
-export interface ConfigReqMessage extends Message {
-    type: Messages.CONFIG_REQ
+export interface ConfigRequestMessage extends Message {
+    type: Messages.CONFIG_REQUEST
     url: string
 }
 
-export interface ConfigResMessage extends Message {
-    type: Messages.CONFIG_RES
+export interface ConfigResponseMessage extends Message {
+    type: Messages.CONFIG_RESPONSE
     data: Config
 }
 
-export interface SourceReqMessage extends Message {
-    type: Messages.SOURCE_REQ
+export interface SourceRequestMessage extends Message {
+    type: Messages.SOURCE_REQUEST
     data: string
 }

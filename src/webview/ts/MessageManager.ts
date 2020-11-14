@@ -8,11 +8,11 @@ export default class MessageManager {
         window.addEventListener('message', ({ data }) => {
             MessageManager._listeners
                 .filter(({ type }) => data.type === type)
-                .forEach(({ fun }) => fun(data));
+                .forEach(({ callback }) => callback(data));
         });
     };
 
-    static on = (type: Messages, fun: (message: Message) => void) => {
-        MessageManager._listeners.push({ type, fun });
+    static on = (type: Messages, callback: (message: Message) => void) => {
+        MessageManager._listeners.push({ type, callback });
     };
 }

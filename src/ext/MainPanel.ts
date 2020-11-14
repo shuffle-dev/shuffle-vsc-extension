@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { readFileSync } from "fs";
 import MessageManager from "./MessageManager";
-import { ConfigReqMessage,  Messages } from '../shared/Messages';
+import { ConfigRequestMessage,  Messages } from '../shared/Messages';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
@@ -49,9 +49,9 @@ export default class MainPanel {
 
         const url = 'https://onet.pl';
         const message = {
-            type: Messages.CONFIG_REQ,
+            type: Messages.CONFIG_REQUEST,
             url,
-        } as ConfigReqMessage;
+        } as ConfigRequestMessage;
 
         MainPanel.currentPanel.panel.webview.postMessage(message);
     }

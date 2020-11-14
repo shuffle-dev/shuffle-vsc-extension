@@ -1,6 +1,6 @@
 import StateService from '../StateService';
 import VscApi from '../utils/VscApi';
-import { Messages, SourceReqMessage } from '../../../shared/Messages';
+import { Messages, SourceRequestMessage } from '../../../shared/Messages';
 
 export default class ComponentsManager {
     private readonly _selectContainer: HTMLDivElement | null;
@@ -81,6 +81,7 @@ export default class ComponentsManager {
     };
 
     private _handleComponentClick = (e: MouseEvent) => {
+
         const target = e.target as HTMLImageElement;
         if (target.tagName.toUpperCase() !== 'IMG') {
             return;
@@ -97,8 +98,8 @@ export default class ComponentsManager {
         }
 
         VscApi.postMessage({
-            type: Messages.SOURCE_REQ,
+            type: Messages.SOURCE_REQUEST,
             data: component.html
-        } as SourceReqMessage);
+        } as SourceRequestMessage);
     };
 }

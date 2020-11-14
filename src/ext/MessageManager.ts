@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import fetch from 'node-fetch';
 import { writeSync as writeSyncToClipboard } from 'clipboardy';
 import MainPanel from './MainPanel';
-import { ConfigReqMessage, ConfigResMessage, Message, Messages, SourceReqMessage } from '../shared/Messages';
+import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages, SourceRequestMessage } from '../shared/Messages';
 import { MessageListener } from '../shared/Types';
 
 export default class MessageManager {
@@ -12,19 +12,15 @@ export default class MessageManager {
     constructor(mainPanel: MainPanel) {
         this.mainPanel = mainPanel;
         this._listeners = [
-            { type: Messages.CONFIG_REQ, fun: this._fetchConfig },
-            { type: Messages.SOURCE_REQ, fun: this._copyToClipboard },
+            { type: Messages.CONFIG_REQUEST, callback: this._fetchConfig },
+            { type: Messages.SOURCE_REQUEST, callback: this._copyToClipboard },
         ];
     }
 
     public receiveMessage = (message: Message) => {
-        console.log('---');
-        console.log(message);
-        console.log('---');
-
         this._listeners
             .filter(({ type }) => message.type === type)
-            .forEach(({ fun }) => fun(message));
+            .forEach(({ callback }) => callback(message));
     };
 
     public postMessage = (message: Message) => {
@@ -32,7 +28,7 @@ export default class MessageManager {
     };
 
     private _fetchConfig = (message: Message) => {
-        const { url } = message as ConfigReqMessage;
+        const { url } = message as ConfigRequestMessage;
 
         fetch(url)
             .then((res) => res.text())
@@ -42,9 +38,9 @@ export default class MessageManager {
                 const jsonConfig = JSON.parse(validJsonConfig);
 
                 this.postMessage({
-                    type: Messages.CONFIG_RES,
+                    type: Messages.CONFIG_RESPONSE,
                     data: jsonConfig
-                } as ConfigResMessage);
+                } as ConfigResponseMessage);
             })
             .catch(e => {
                 vscode.window.showErrorMessage("Shuffle: Cannot fetch config file");
@@ -53,7 +49,7 @@ export default class MessageManager {
     };
 
     private _copyToClipboard = (message: Message) => {
-        const { data } = message as SourceReqMessage;
+        const { data } = message as SourceRequestMessage;
         writeSyncToClipboard(data);
         vscode.window.showInformationMessage("Copied to clipboard!");
     };

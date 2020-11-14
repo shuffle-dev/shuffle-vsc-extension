@@ -2,7 +2,7 @@ import VscApi from './utils/VscApi';
 import { Builders, BuilderType } from '../../shared/Builders';
 import MessageManager from './MessageManager';
 import { Config } from '../../shared/Types';
-import { ConfigReqMessage, ConfigResMessage, Message, Messages } from '../../shared/Messages';
+import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../shared/Messages';
 
 type IState = { [index: string]: any };
 export type State = IState & {
@@ -20,7 +20,7 @@ export default class StateProvider {
 
     constructor(onChange: (config: State) => void) {
         this._onChangeListener = onChange;
-        MessageManager.on(Messages.CONFIG_RES, this.receiveConfig);
+        MessageManager.on(Messages.CONFIG_RESPONSE, this.receiveConfig);
     }
 
     load = () => {
@@ -39,13 +39,13 @@ export default class StateProvider {
 
     private _reqForConfig = () => {
         VscApi.postMessage({
-            type: Messages.CONFIG_REQ,
+            type: Messages.CONFIG_REQUEST,
             url: Builders.getDefault().url
-        } as ConfigReqMessage);
+        } as ConfigRequestMessage);
     };
 
     private receiveConfig = (message: Message) => {
-        const { data } = message as ConfigResMessage;
+        const { data } = message as ConfigResponseMessage;
         const currentState = VscApi.getState();
 
         const state: State = currentState === undefined ? ({

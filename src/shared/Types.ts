@@ -6,11 +6,12 @@ export type Component = {
     html: string,
     config: object[]
 };
+
 export type Config = {
     [key: string]: Component[]
 };
 
 export type MessageListener = {
     type: Messages,
-    fun: (message: Message) => void
+    callback: (message: Message) => void
 };

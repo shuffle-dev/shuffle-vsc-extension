@@ -2,7 +2,7 @@ import VscApi from './utils/VscApi';
 import {PartialState, State} from './StateProvider';
 import {Builders} from '../../shared/Builders';
 import {Component} from '../../shared/Types';
-import {ConfigReqMessage, Messages} from '../../shared/Messages';
+import {ConfigRequestMessage, Messages} from '../../shared/Messages';
 
 export default class StateService {
     private _state: State;
@@ -66,11 +66,9 @@ export default class StateService {
         // @ToDo change to create url with key
         const url = builder.url;
 
-        console.log(url);
-        
         VscApi.postMessage({
-            type: Messages.CONFIG_REQ,
+            type: Messages.CONFIG_REQUEST,
             url,
-        } as ConfigReqMessage);
+        } as ConfigRequestMessage);
     };
 }
