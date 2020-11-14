@@ -74,7 +74,7 @@ export default class MainPanel {
         const styleUri = webview.asWebviewUri(stylePath);
         const htmlContent = readFileSync(htmlPath.fsPath);
 
-        const rand = Math.random() * 100;
+        const rand = Math.random();
 
         this.panel.webview.html = (
             `<!DOCTYPE html>
@@ -90,7 +90,7 @@ export default class MainPanel {
             </head>
             <body>
                 ${htmlContent}
-                <script src="${scriptUri}"></script>
+                <script src="${scriptUri}?rand=${rand}"></script>
             </body>
             </html>`
         );
