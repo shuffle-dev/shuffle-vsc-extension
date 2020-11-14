@@ -34,10 +34,12 @@ export default class ComponentsManager {
     private _createSelectOptions = (select: HTMLSelectElement) => {
         const currentCategory = this._stateService.getCategory();
         const categories = this._stateService.getCategories();
+
         categories.forEach((category) => {
             const option = document.createElement('option');
             option.setAttribute('value', category);
             option.innerText = category;
+
             if (category === currentCategory) {
                 option.selected = true;
             }
@@ -80,12 +82,12 @@ export default class ComponentsManager {
 
     private _handleComponentClick = (e: MouseEvent) => {
         const target = e.target as HTMLImageElement;
-        if(target.tagName.toUpperCase() !== 'IMG') {
+        if (target.tagName.toUpperCase() !== 'IMG') {
             return;
         }
 
         const id = target.getAttribute('data-id');
-        if(id === null) {
+        if (id === null) {
             return;
         }
 

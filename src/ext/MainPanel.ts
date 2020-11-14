@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { readFileSync } from "fs";
 import MessageManager from "./MessageManager";
+import { ConfigReqMessage,  Messages } from '../shared/Messages';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
@@ -17,7 +18,7 @@ export default class MainPanel {
         this.context = context;
         this._messageManager = new MessageManager(this);
 
-        this._createPanel();
+        this._createHtmlView();
         this._onReceiveMessage();
         this._onDispose();
     }
@@ -45,6 +46,14 @@ export default class MainPanel {
 
     public static attachCurrentPanel(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
         MainPanel.currentPanel = new MainPanel(panel, context);
+
+        const url = 'https://onet.pl';
+        const message = {
+            type: Messages.CONFIG_REQ,
+            url,
+        } as ConfigReqMessage;
+
+        MainPanel.currentPanel.panel.webview.postMessage(message);
     }
 
     public hide() {
@@ -53,7 +62,7 @@ export default class MainPanel {
         this._disposables.forEach(item => item.dispose());
     }
 
-    private _createPanel() {
+    private _createHtmlView() {
         const webview = this.panel.webview;
         const mediaPath = vscode.Uri.joinPath(this.context.extensionUri,  'media');
 
@@ -64,6 +73,8 @@ export default class MainPanel {
         const scriptUri = webview.asWebviewUri(scriptPath);
         const styleUri = webview.asWebviewUri(stylePath);
         const htmlContent = readFileSync(htmlPath.fsPath);
+
+        const rand = Math.random() * 100;
 
         this.panel.webview.html = (
             `<!DOCTYPE html>

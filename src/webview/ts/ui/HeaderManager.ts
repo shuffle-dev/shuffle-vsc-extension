@@ -40,7 +40,7 @@ export default class HeaderManager {
     };
 
     private _setCurrentBuilderActive = () => {
-      const builders = this._buildersContainer?.querySelectorAll("button[data-key]");
+      const builders = this._buildersContainer?.querySelectorAll('button[data-key]');
 
       if(!builders) {
           return;

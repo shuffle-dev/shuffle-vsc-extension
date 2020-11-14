@@ -11,3 +11,7 @@ const stateProvider = new StateProvider((config) => {
 });
 
 stateProvider.load();
+
+setInterval(() => {
+    console.log('HHHHHEJ');
+}, 2000);
