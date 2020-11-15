@@ -1,8 +1,8 @@
-import VscApi from './utils/VscApi';
+import VscApi from '../utils/VscApi';
 import {PartialState, State} from './StateProvider';
-import {Builders} from '../../shared/Builders';
-import {Component} from '../../shared/Types';
-import {ConfigRequestMessage, Messages} from '../../shared/Messages';
+import {Builders} from '../../../shared/Builders';
+import {Component} from '../../../shared/Types';
+import {ConfigRequestMessage, Messages} from '../../../shared/Messages';
 
 export default class StateService {
     private _state: State;

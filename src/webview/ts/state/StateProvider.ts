@@ -1,8 +1,8 @@
-import VscApi from './utils/VscApi';
-import { Builders, BuilderType } from '../../shared/Builders';
-import MessageManager from './MessageManager';
-import { Config } from '../../shared/Types';
-import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../shared/Messages';
+import VscApi from '../utils/VscApi';
+import { Builders, BuilderType } from '../../../shared/Builders';
+import MessageManager from '../MessageManager';
+import { Config } from '../../../shared/Types';
+import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
 
 type IState = { [index: string]: any };
 export type State = IState & {
@@ -25,7 +25,7 @@ export default class StateProvider {
     }
 
     load = () => {
-        if (!this._isAlreadyFetched()) {
+        if (!this._hasConfig()) {
             this._requestForConfig();
             return;
         }
@@ -34,7 +34,7 @@ export default class StateProvider {
         this._onChangeListener(state);
     };
 
-    private _isAlreadyFetched = () => {
+    private _hasConfig = () => {
         return VscApi.getState() !== undefined;
     };
 
@@ -49,15 +49,21 @@ export default class StateProvider {
         const { data } = message as ConfigResponseMessage;
         const currentState = VscApi.getState();
 
-        const state: State = currentState === undefined ? ({
-            config: data,
-            key: '',
-            category: Object.keys(data)[0],
-            builder: Builders.getDefault(),
-        }) : ({
-            ...currentState,
-            config: data,
-        });
+        let state: State;
+
+        if (currentState === undefined) {
+            state = {
+                config: data,
+                key: '',
+                category: Object.keys(data)[0],
+                builder: Builders.getDefault(),
+            };
+        } else {
+            state = ({
+                ...currentState,
+                config: data,
+            });
+        }
 
         VscApi.setState(state);
         this._onChangeListener(state);

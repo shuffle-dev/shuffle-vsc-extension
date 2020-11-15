@@ -1,4 +1,4 @@
-import StateService from '../StateService';
+import StateService from '../state/StateService';
 import VscApi from '../utils/VscApi';
 import { Messages, SourceRequestMessage } from '../../../shared/Messages';
 

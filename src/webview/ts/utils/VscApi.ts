@@ -1,5 +1,5 @@
 import { Message } from '../../../shared/Messages';
-import { State, PartialState } from '../StateProvider';
+import { State, PartialState } from '../state/StateProvider';
 
 declare global {
     interface Window {
@@ -24,6 +24,7 @@ export default class VscApi {
         if (!VscApi.isInitialized) {
             VscApi.init();
         }
+
         return window.vscApi;
     };
 
@@ -44,7 +45,9 @@ export default class VscApi {
         if (currentState === undefined) {
             return;
         }
+
         Object.keys(state).forEach(key => state[key] === undefined && delete state[key]);
+
         VscApi.setState({
             ...currentState,
             ...state

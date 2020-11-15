@@ -1,4 +1,4 @@
-import StateService from '../StateService';
+import StateService from '../state/StateService';
 import HeaderManager from './HeaderManager';
 import ComponentsManager from './ComponentsManager';
 

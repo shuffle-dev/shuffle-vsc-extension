@@ -1,7 +1,7 @@
 import MessageManager from './MessageManager';
-import StateService from './StateService';
+import StateService from './state/StateService';
+import StateProvider from './state/StateProvider';
 import UIManager from './ui/UIManager';
-import StateProvider from './StateProvider';
 
 MessageManager.init();
 
