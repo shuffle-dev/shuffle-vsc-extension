@@ -14,31 +14,10 @@ export default class StateProvider {
         MessageManager.on(Messages.SHUFFLE_STATE_RESTORE, this._restoreState);
     }
 
-    load = () => {
-        const state = VscApi.getState() as State;
-        if (!this._hasConfig(state)) {
-            this._requestForConfig(state);
-            return;
-        }
-
-        this._onChangeListener(state);
-    };
-
     private _restoreState = (message: Message) => {
         const { state } = message as ShuffleStateRestoreMessage;
         VscApi.setState(state, false);
         this._onChangeListener(state);
-    };
-
-    private _hasConfig = ({ config }: State) => {
-        return !!Object.keys(config).length;
-    };
-
-    private _requestForConfig = ({ builder }: State) => {
-        VscApi.postMessage({
-            type: Messages.CONFIG_REQUEST,
-            url: builder.url
-        } as ConfigRequestMessage);
     };
 
     private receiveConfig = (message: Message) => {

@@ -21,3 +21,5 @@ export function activate(context: vscode.ExtensionContext) {
         });
     }
 }
+
+console.log('READY ext!');

@@ -41,7 +41,7 @@
         "watch:webview": "npm-run-all --parallel watch:webview:html watch:webview:css watch:webview:js",
         "watch:webview:html": "parcel watch ./src/webview/pug/index.pug --out-dir ./media",
         "watch:webview:css": "parcel watch ./src/webview/scss/main.scss --out-dir ./media",
-        "watch:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target browser --no-hmr --no-autoinstall"
+        "watch:webview:js": "parcel watch ./src/webview/ts/main.ts --out-dir ./media --target browser"
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",

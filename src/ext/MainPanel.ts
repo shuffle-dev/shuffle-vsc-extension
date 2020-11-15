@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 import MessageManager from './MessageManager';
-import { Messages, ShuffleStateRestoreMessage } from '../shared/Messages';
+import { Messages, ShuffleStateRestoreMessage, ConfigRequestMessage } from '../shared/Messages';
 import { State } from '../shared/Types';
+import { initialState } from '../shared/InitialState';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
@@ -59,6 +60,7 @@ export default class MainPanel {
 
     private _restoreShuffleState(context: vscode.ExtensionContext) {
         const state = context.globalState.get('shuffle-state') as State;
+        let hasComponents = true;
 
         if (state) {
             const message : ShuffleStateRestoreMessage = {
@@ -67,6 +69,23 @@ export default class MainPanel {
             };
 
             this._messageManager.postMessage(message);
+            hasComponents = Object.keys(state.config).length > 0;
+        }
+
+        if (!state || !hasComponents) {
+            let url = initialState.builder.url;
+
+            if (state && state.builder) {
+                url = state.builder.url;
+            }
+
+            const message : ConfigRequestMessage = {
+                type: Messages.CONFIG_REQUEST,
+                url,
+            };
+    
+            // Force config load
+            this._messageManager.receiveMessage(message);
         }
     }
 
