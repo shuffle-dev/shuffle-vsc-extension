@@ -1,20 +1,8 @@
 import VscApi from '../utils/VscApi';
 import { Builders, BuilderType } from '../../../shared/Builders';
 import MessageManager from '../MessageManager';
-import { Config } from '../../../shared/Types';
+import { State } from '../../../shared/Types';
 import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
-
-type IState = { [index: string]: any };
-export type State = IState & {
-    apiKey: string,
-    builder: BuilderType,
-    category: string,
-    config: Config,
-};
-
-export type PartialState = {
-    [T in keyof State]?: State[T]
-};
 
 export default class StateProvider {
     private readonly _onChangeListener: (config: State) => void;

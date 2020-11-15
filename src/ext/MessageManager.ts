@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import fetch from 'node-fetch';
 import { writeSync as writeSyncToClipboard } from 'clipboardy';
 import MainPanel from './MainPanel';
-import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages, SourceRequestMessage } from '../shared/Messages';
+import { ShuffleStateStoreMessage, ConfigRequestMessage, ConfigResponseMessage, Message, Messages, SourceRequestMessage } from '../shared/Messages';
 import { MessageListener } from '../shared/Types';
 
 export default class MessageManager {
@@ -12,6 +12,7 @@ export default class MessageManager {
     constructor(mainPanel: MainPanel) {
         this.mainPanel = mainPanel;
         this._listeners = [
+            { type: Messages.SHUFFLE_STATE_STORE, callback: this._storeState },
             { type: Messages.CONFIG_REQUEST, callback: this._fetchConfig },
             { type: Messages.SOURCE_REQUEST, callback: this._copyToClipboard },
         ];
@@ -25,6 +26,11 @@ export default class MessageManager {
 
     public postMessage = (message: Message) => {
         this.mainPanel.panel.webview.postMessage(message);
+    };
+
+    private _storeState = (message: Message) => {
+        const { state } = message as ShuffleStateStoreMessage;
+        this.mainPanel.context.globalState.update('shuffle-state', state);
     };
 
     private _fetchConfig = (message: Message) => {
@@ -43,7 +49,7 @@ export default class MessageManager {
                 } as ConfigResponseMessage);
             })
             .catch(e => {
-                vscode.window.showErrorMessage("Shuffle: Cannot fetch config file");
+                vscode.window.showErrorMessage('Shuffle: Cannot fetch config file');
                 console.error(e);
             });
     };
@@ -51,6 +57,6 @@ export default class MessageManager {
     private _copyToClipboard = (message: Message) => {
         const { data } = message as SourceRequestMessage;
         writeSyncToClipboard(data);
-        vscode.window.showInformationMessage("Copied to clipboard!");
+        vscode.window.showInformationMessage('Copied to clipboard!');
     };
 }

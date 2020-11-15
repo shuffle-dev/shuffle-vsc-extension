@@ -1,7 +1,6 @@
-import * as vscode from "vscode";
-import { readFileSync } from "fs";
-import MessageManager from "./MessageManager";
-import { ConfigRequestMessage,  Messages } from '../shared/Messages';
+import * as vscode from 'vscode';
+import { readFileSync } from 'fs';
+import MessageManager from './MessageManager';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
@@ -21,6 +20,9 @@ export default class MainPanel {
         this._createHtmlView();
         this._onReceiveMessage();
         this._onDispose();
+
+        const state = context.globalState.get('shuffle-state');
+        console.log(state);
     }
 
     public static createOrShow(context: vscode.ExtensionContext) {
@@ -46,14 +48,6 @@ export default class MainPanel {
 
     public static attachCurrentPanel(panel: vscode.WebviewPanel, context: vscode.ExtensionContext) {
         MainPanel.currentPanel = new MainPanel(panel, context);
-
-        const url = 'https://onet.pl';
-        const message = {
-            type: Messages.CONFIG_REQUEST,
-            url,
-        } as ConfigRequestMessage;
-
-        MainPanel.currentPanel.panel.webview.postMessage(message);
     }
 
     public hide() {
