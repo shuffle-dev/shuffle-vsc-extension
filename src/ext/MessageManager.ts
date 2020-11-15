@@ -2,7 +2,14 @@ import * as vscode from 'vscode';
 import fetch from 'node-fetch';
 import { writeSync as writeSyncToClipboard } from 'clipboardy';
 import MainPanel from './MainPanel';
-import { ShuffleStateStoreMessage, ConfigRequestMessage, ConfigResponseMessage, Message, Messages, SourceRequestMessage } from '../shared/Messages';
+import {
+    ShuffleStateStoreMessage,
+    ConfigRequestMessage,
+    ConfigResponseMessage,
+    Message,
+    Messages,
+    SourceRequestMessage,
+} from '../shared/Messages';
 import { MessageListener } from '../shared/Types';
 
 export default class MessageManager {

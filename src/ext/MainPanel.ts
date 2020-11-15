@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 import MessageManager from './MessageManager';
+import { Messages, ShuffleStateRestoreMessage } from '../shared/Messages';
+import { State } from '../shared/Types';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
@@ -20,9 +22,7 @@ export default class MainPanel {
         this._createHtmlView();
         this._onReceiveMessage();
         this._onDispose();
-
-        const state = context.globalState.get('shuffle-state');
-        console.log(state);
+        this._restoreShuffleState(context);
     }
 
     public static createOrShow(context: vscode.ExtensionContext) {
@@ -54,6 +54,19 @@ export default class MainPanel {
         MainPanel.currentPanel = undefined;
         this.panel.dispose();
         this._disposables.forEach(item => item.dispose());
+    }
+
+    private _restoreShuffleState(context: vscode.ExtensionContext) {
+        const state = context.globalState.get('shuffle-state') as State;
+
+        if (state) {
+            const message : ShuffleStateRestoreMessage = {
+                type: Messages.SHUFFLE_STATE_RESTORE,
+                state
+            };
+
+            this._messageManager.postMessage(message);
+        }
     }
 
     private _createHtmlView() {

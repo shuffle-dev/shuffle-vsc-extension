@@ -1,8 +1,8 @@
 import VscApi from '../utils/VscApi';
-import { Builders, BuilderType } from '../../../shared/Builders';
+import { Builders } from '../../../shared/Builders';
 import MessageManager from '../MessageManager';
 import { State } from '../../../shared/Types';
-import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
+import { ShuffleStateRestoreMessage, ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
 
 export default class StateProvider {
     private readonly _onChangeListener: (config: State) => void;
@@ -10,6 +10,7 @@ export default class StateProvider {
     constructor(onChange: (config: State) => void) {
         this._onChangeListener = onChange;
         MessageManager.on(Messages.CONFIG_RESPONSE, this.receiveConfig);
+        MessageManager.on(Messages.SHUFFLE_STATE_RESTORE, this._restoreState);
     }
 
     load = () => {
@@ -20,6 +21,13 @@ export default class StateProvider {
 
         const state = VscApi.getState() as State;
         this._onChangeListener(state);
+    };
+
+    private _restoreState = (message: Message) => {
+        const { state } = message as ShuffleStateRestoreMessage;
+
+        console.log('Restore: ' + state.apiKey);
+        VscApi.setState(state, false);
     };
 
     private _hasConfig = () => {

@@ -1,4 +1,4 @@
-import { Message } from '../../../shared/Messages';
+import { Message, Messages, ShuffleStateStoreMessage } from '../../../shared/Messages';
 import { PartialState, State  } from '../../../shared/Types';
 
 declare global {
@@ -36,8 +36,17 @@ export default class VscApi {
         return VscApi.getApi().getState();
     };
 
-    static setState = (state: State) => {
+    static setState = (state: State, store: boolean = true) => {
         VscApi.getApi().setState(state);
+
+        if (store) {
+            const message : ShuffleStateStoreMessage = {
+                type: Messages.SHUFFLE_STATE_STORE,
+                state
+            };
+    
+            VscApi.getApi().postMessage(message);
+        }
     };
 
     static changeState = (state: PartialState) => {
