@@ -6,7 +6,7 @@ import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '
 
 type IState = { [index: string]: any };
 export type State = IState & {
-    key: string,
+    apiKey: string,
     builder: BuilderType,
     category: string,
     config: Config,
@@ -54,7 +54,7 @@ export default class StateProvider {
         if (currentState === undefined) {
             state = {
                 config: data,
-                key: '',
+                apiKey: '',
                 category: Object.keys(data)[0],
                 builder: Builders.getDefault(),
             };

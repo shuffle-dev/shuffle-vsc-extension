@@ -15,12 +15,13 @@ export default class StateService {
         this._changeState({ category });
     };
 
-    public changeKey = (key: string) => {
-        this._changeState({ key });
+    public changeApiKey = (apiKey: string) => {
+        console.log('CHANGE API KEY' + apiKey);
+        this._changeState({ apiKey });
     };
 
-    public changeBuilder = (key: string) => {
-        const builder = Builders.getBuilder(key);
+    public changeBuilder = (id: string) => {
+        const builder = Builders.getBuilder(id);
         if (builder === undefined) {
             return;
         }
@@ -48,8 +49,8 @@ export default class StateService {
         return this._state.category;
     };
 
-    public getKey = () => {
-        return this._state.key;
+    public getApiKey = () => {
+        return this._state.apiKey;
     };
 
     public getBuilder = () => {
@@ -62,8 +63,8 @@ export default class StateService {
     };
 
     public fetchConfig = () => {
-        const { builder, key } = this._state;
-        // @ToDo change to create url with key
+        const { builder, apiKey } = this._state;
+        // @ToDo change to create url with apiKey
         const url = builder.url;
 
         VscApi.postMessage({
