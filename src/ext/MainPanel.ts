@@ -24,7 +24,7 @@ export default class MainPanel {
         this._createHtmlView();
         this._onReceiveMessage();
         this._onDispose();
-        this._restoreShuffleState(context);
+        this._restoreShuffleState();
     }
 
     public static createOrShow(context: vscode.ExtensionContext) {
@@ -44,7 +44,7 @@ export default class MainPanel {
         const panel = vscode.window.createWebviewPanel(
             MainPanel.viewType, MainPanel.viewTitle, column, panelOptions,
         );
-        
+
         MainPanel.attachCurrentPanel(panel, context);
     }
 
@@ -58,8 +58,8 @@ export default class MainPanel {
         this._disposables.forEach(item => item.dispose());
     }
 
-    private _restoreShuffleState(context: vscode.ExtensionContext) {
-        const state = context.globalState.get('shuffle-state') as State;
+    private _restoreShuffleState() {
+        const state = this.context.globalState.get('shuffle-state') as State;
         let hasComponents = true;
 
         if (state) {
@@ -83,7 +83,7 @@ export default class MainPanel {
                 type: Messages.CONFIG_REQUEST,
                 url,
             };
-    
+
             // Force config load
             this._messageManager.receiveMessage(message);
         }
@@ -133,7 +133,7 @@ export default class MainPanel {
             this.panel.dispose();
             this._disposables.forEach(item => item.dispose());
         };
-    
+
         this.panel.onDidDispose(listener, null, this._disposables);
     };
 }
