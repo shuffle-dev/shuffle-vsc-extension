@@ -8,7 +8,13 @@ export default class StateService {
 
     constructor(state: State) {
         this._state = state;
+        VscApi.setState(state);
     }
+
+    public setState = (state: State) => {
+        this._state = state;
+        VscApi.setState(state);
+    };
 
     public changeCategory = (category: string) => {
         this._changeState({ category });
@@ -43,22 +49,18 @@ export default class StateService {
     };
 
     public getCategories = () => {
-        this._state = VscApi.getState() as State;
         return Object.keys(this._state.config);
     };
 
     public getCategory = () => {
-        this._state = VscApi.getState() as State;
         return this._state.category;
     };
 
     public getApiKey = () => {
-        this._state = VscApi.getState() as State;
         return this._state.apiKey;
     };
 
     public getBuilder = () => {
-        this._state = VscApi.getState() as State;
         return this._state.builder;
     };
 
@@ -68,7 +70,6 @@ export default class StateService {
     };
 
     public fetchConfig = () => {
-        this._state = VscApi.getState() as State;
         const { builder, apiKey } = this._state;
         // @ToDo change to create url with apiKey
         const url = builder.url;

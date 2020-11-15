@@ -32,7 +32,7 @@ export default class VscApi {
         VscApi.getApi().postMessage(message);
     };
 
-    static getState = (): State | undefined => {
+    static getState = (): State => {
         return VscApi.getApi().getState();
     };
 
@@ -44,8 +44,8 @@ export default class VscApi {
                 type: Messages.SHUFFLE_STATE_STORE,
                 state
             };
-    
-            VscApi.getApi().postMessage(message);
+
+            VscApi.postMessage(message);
         }
     };
 

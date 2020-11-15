@@ -3,8 +3,6 @@ import HeaderManager from './HeaderManager';
 import ComponentsManager from './ComponentsManager';
 
 export default class UIManager {
-    private static _isInitialized = false;
-
     private _headerManager: HeaderManager;
     private _componentsManager: ComponentsManager;
 
@@ -12,18 +10,11 @@ export default class UIManager {
         this._headerManager = new HeaderManager(configService);
         this._componentsManager = new ComponentsManager(configService);
 
-        this._runOnce(() => {
-            this._headerManager.bindEvents();
-            this._componentsManager.bindEvents();
-        });
-
-        this._componentsManager.createStructure();
+        this._headerManager.bindEvents();
+        this._componentsManager.bindEvents();
     };
 
-    private _runOnce = (callback: () => void) => {
-        if (!UIManager._isInitialized) {
-            callback();
-            UIManager._isInitialized = true;
-        }
+    public update = () => {
+        this._componentsManager.createStructure();
     };
 }
