@@ -2,23 +2,23 @@ import StateService from '../state/StateService';
 
 export default class HeaderManager {
     private readonly _buildersContainer: HTMLDivElement | null;
-    private readonly _keyInput: HTMLInputElement | null;
-    private readonly _keyButton: HTMLButtonElement | null;
+    private readonly _apiKeyInput: HTMLInputElement | null;
+    private readonly _apiKeyButton: HTMLButtonElement | null;
 
     private _stateService: StateService;
 
     constructor(configService: StateService) {
         this._stateService = configService;
         this._buildersContainer = document.querySelector<HTMLDivElement>('#buildersContainer');
-        this._keyInput = document.querySelector<HTMLInputElement>('#keyInput');
-        this._keyButton = document.querySelector<HTMLButtonElement>('#keyButton');
+        this._apiKeyInput = document.querySelector<HTMLInputElement>('#apiKeyInput');
+        this._apiKeyButton = document.querySelector<HTMLButtonElement>('#apiKeyButton');
 
         this._setCurrentBuilderActive();
     };
 
     public bindEvents = () => {
         this._buildersContainer?.addEventListener('click', this._handleBuilderChange);
-        this._keyButton?.addEventListener('click', this._handleFetchButtonClick);
+        this._apiKeyButton?.addEventListener('click', this._handleFetchButtonClick);
     };
 
     private _handleBuilderChange = (e: MouseEvent) => {
@@ -54,7 +54,7 @@ export default class HeaderManager {
     };
 
     private _handleFetchButtonClick = () => {
-        const key = this._keyInput?.value;
+        const key = this._apiKeyInput?.value;
 
         if (key === undefined) {
             return;
