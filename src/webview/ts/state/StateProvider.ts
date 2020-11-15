@@ -25,8 +25,6 @@ export default class StateProvider {
 
     private _restoreState = (message: Message) => {
         const { state } = message as ShuffleStateRestoreMessage;
-
-        console.log('Restore: ' + state.apiKey);
         VscApi.setState(state, false);
     };
 
