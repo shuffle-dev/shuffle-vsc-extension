@@ -11,19 +11,19 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:shuffle.openWindow",
+        "onCommand:shuffle.window",
         "onWebviewPanel:shuffle"
     ],
     "main": "./out/ext/main.js",
     "contributes": {
         "keybindings": {
             "key": "ctrl+d",
-            "command": "shuffle.openWindow"
+            "command": "shuffle.window"
         },
         "commands": [
             {
-                "command": "shuffle.openWindow",
-                "title": "Shuffle: Open the Shuffle components library."
+                "command": "shuffle.window",
+                "title": "Shuffle.dev: Toggle UI Component library"
             }
         ]
     },

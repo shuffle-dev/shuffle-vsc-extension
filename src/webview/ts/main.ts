@@ -17,7 +17,6 @@ const stateService = new StateService(initialState);
 const uiManager = new UIManager(stateService);
 
 const stateProvider = new StateProvider((state) => {
-    console.log(state.apiKey);
     stateService.setState(state);
     uiManager.update();
 });

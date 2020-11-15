@@ -6,6 +6,7 @@ import { State } from '../shared/Types';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
+    public static readonly viewTitle = 'Shuffle.dev';
     public static readonly viewType = 'shuffle';
 
     public readonly panel: vscode.WebviewPanel;
@@ -29,7 +30,7 @@ export default class MainPanel {
         const column = vscode.ViewColumn.Beside;
 
         if (MainPanel.currentPanel) {
-            MainPanel.currentPanel.hide();
+            MainPanel.currentPanel.panel.reveal(column);
             return;
         }
 
@@ -40,9 +41,9 @@ export default class MainPanel {
         };
 
         const panel = vscode.window.createWebviewPanel(
-            MainPanel.viewType, 'Shuffle.dev', column, panelOptions,
+            MainPanel.viewType, MainPanel.viewTitle, column, panelOptions,
         );
-
+        
         MainPanel.attachCurrentPanel(panel, context);
     }
 

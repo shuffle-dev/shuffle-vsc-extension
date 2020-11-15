@@ -58,6 +58,7 @@ export default class ComponentsManager {
         this._clearComponents();
 
         const components = this._stateService.getComponents();
+
         components.map((component) => {
             const elem = document.createElement('img');
             elem.setAttribute('src', `https://tailwind.build/${component.preview}`);
