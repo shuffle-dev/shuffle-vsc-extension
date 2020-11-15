@@ -32,7 +32,7 @@ export default class VscApi {
         VscApi.getApi().postMessage(message);
     };
 
-    static getState = (): State | undefined => {
+    static getState = (): State => {
         return VscApi.getApi().getState();
     };
 

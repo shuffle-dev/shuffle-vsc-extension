@@ -1,5 +1,5 @@
 import VscApi from '../utils/VscApi';
-import { Builders, BuilderType } from '../../../shared/Builders';
+import { BuilderType } from '../../../shared/Builders';
 import MessageManager from '../MessageManager';
 import { Config } from '../../../shared/Types';
 import { ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
@@ -16,56 +16,47 @@ export type PartialState = {
     [T in keyof State]?: State[T]
 };
 
-export default class StateProvider {
-    private readonly _onChangeListener: (config: State) => void;
+type OnChangeCallback = (config: State) => void;
 
-    constructor(onChange: (config: State) => void) {
+export default class StateProvider {
+    private readonly _onChangeListener: OnChangeCallback;
+
+    constructor(onChange: OnChangeCallback) {
         this._onChangeListener = onChange;
         MessageManager.on(Messages.CONFIG_RESPONSE, this.receiveConfig);
     }
 
     load = () => {
-        if (!this._hasConfig()) {
-            this._requestForConfig();
+        const state = VscApi.getState() as State;
+        if (!this._hasConfig(state)) {
+            this._requestForConfig(state);
             return;
         }
 
-        const state = VscApi.getState() as State;
         this._onChangeListener(state);
     };
 
-    private _hasConfig = () => {
-        return VscApi.getState() !== undefined;
+    private _hasConfig = ({ config }: State) => {
+        return !!Object.keys(config).length;
     };
 
-    private _requestForConfig = () => {
+    private _requestForConfig = ({ builder }: State) => {
         VscApi.postMessage({
             type: Messages.CONFIG_REQUEST,
-            url: Builders.getDefault().url
+            url: builder.url
         } as ConfigRequestMessage);
     };
 
     private receiveConfig = (message: Message) => {
-        const { data } = message as ConfigResponseMessage;
+        const { data: config } = message as ConfigResponseMessage;
         const currentState = VscApi.getState();
 
-        let state: State;
+        const state: State = {
+            ...currentState,
+            category: Object.keys(config)[0],
+            config
+        };
 
-        if (currentState === undefined) {
-            state = {
-                config: data,
-                apiKey: '',
-                category: Object.keys(data)[0],
-                builder: Builders.getDefault(),
-            };
-        } else {
-            state = ({
-                ...currentState,
-                config: data,
-            });
-        }
-
-        VscApi.setState(state);
         this._onChangeListener(state);
     };
 }
