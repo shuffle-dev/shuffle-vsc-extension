@@ -27,6 +27,7 @@ export default class StateProvider {
     private _restoreState = (message: Message) => {
         const { state } = message as ShuffleStateRestoreMessage;
         VscApi.setState(state, false);
+        this._onChangeListener(state);
     };
 
     private _hasConfig = ({ config }: State) => {

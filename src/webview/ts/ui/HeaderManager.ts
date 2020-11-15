@@ -1,3 +1,4 @@
+import { throws } from 'assert';
 import StateService from '../state/StateService';
 
 export default class HeaderManager {
@@ -14,14 +15,17 @@ export default class HeaderManager {
         this._apiEmailInput = document.querySelector<HTMLInputElement>('#apiEmailInput');
         this._apiKeyInput = document.querySelector<HTMLInputElement>('#apiKeyInput');
         this._apiSaveButton = document.querySelector<HTMLButtonElement>('#apiSaveButton');
-
-        this._setCurrentBuilderActive();
-        this._setCurrentApiSettings();
+        this.updateInterface();
     };
 
     public bindEvents = () => {
         this._buildersContainer?.addEventListener('click', this._handleBuilderChange);
         this._apiSaveButton?.addEventListener('click', this._handleFetchButtonClick);
+    };
+
+    public updateInterface = () => {
+        this._setCurrentBuilderActive();
+        this._setCurrentApiSettings();
     };
 
     private _handleBuilderChange = (e: MouseEvent) => {

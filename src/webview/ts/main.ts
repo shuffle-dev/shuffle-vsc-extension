@@ -2,8 +2,8 @@ import MessageManager from './MessageManager';
 import StateService from './state/StateService';
 import StateProvider from './state/StateProvider';
 import UIManager from './ui/UIManager';
-import { Builders } from "../../shared/Builders";
-import { State } from "../../shared/Types";
+import { Builders } from '../../shared/Builders';
+import { State } from '../../shared/Types';
 
 const initialState: State = {
     apiKey: '',
@@ -17,6 +17,7 @@ const stateService = new StateService(initialState);
 const uiManager = new UIManager(stateService);
 
 const stateProvider = new StateProvider((state) => {
+    console.log(state.apiKey);
     stateService.setState(state);
     uiManager.update();
 });

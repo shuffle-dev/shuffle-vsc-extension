@@ -35,8 +35,6 @@ export default class StateService {
 
     public getComponents = (category?: string): Component[] => {
         const currentCategory = category === undefined ? this.getCategory() : category;
-
-        this._state = VscApi.getState() as State;
         const components = this._state.config[currentCategory];
         return components === undefined ? [] : components;
     };

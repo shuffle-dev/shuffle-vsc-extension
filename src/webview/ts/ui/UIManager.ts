@@ -16,5 +16,6 @@ export default class UIManager {
 
     public update = () => {
         this._componentsManager.createStructure();
+        this._headerManager.updateInterface();
     };
 }
