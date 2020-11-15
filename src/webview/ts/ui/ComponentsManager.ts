@@ -81,7 +81,6 @@ export default class ComponentsManager {
     };
 
     private _handleComponentClick = (e: MouseEvent) => {
-
         const target = e.target as HTMLImageElement;
         if (target.tagName.toUpperCase() !== 'IMG') {
             return;

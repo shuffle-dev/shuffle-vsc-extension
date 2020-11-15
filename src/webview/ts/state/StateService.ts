@@ -16,7 +16,6 @@ export default class StateService {
     };
 
     public changeApiKey = (apiKey: string) => {
-        console.log('CHANGE API KEY' + apiKey);
         this._changeState({ apiKey });
     };
 
@@ -30,30 +29,37 @@ export default class StateService {
     };
 
     public getComponents = (category?: string): Component[] => {
-        const findingCategory = category === undefined ? this.getCategory() : category;
-        const components = this._state.config[findingCategory];
+        const currentCategory = category === undefined ? this.getCategory() : category;
+
+        this._state = VscApi.getState() as State;
+        const components = this._state.config[currentCategory];
         return components === undefined ? [] : components;
     };
 
     public getComponent = (id: string, category?: string): Component | null => {
         const components = this.getComponents(category);
+
         const component = components.find((elem) => elem.id === id);
         return component ? component : null;
     };
 
     public getCategories = () => {
+        this._state = VscApi.getState() as State;
         return Object.keys(this._state.config);
     };
 
     public getCategory = () => {
+        this._state = VscApi.getState() as State;
         return this._state.category;
     };
 
     public getApiKey = () => {
+        this._state = VscApi.getState() as State;
         return this._state.apiKey;
     };
 
     public getBuilder = () => {
+        this._state = VscApi.getState() as State;
         return this._state.builder;
     };
 
@@ -63,9 +69,12 @@ export default class StateService {
     };
 
     public fetchConfig = () => {
+        this._state = VscApi.getState() as State;
         const { builder, apiKey } = this._state;
         // @ToDo change to create url with apiKey
         const url = builder.url;
+
+        console.log('CONFIG REQUEST: ' + url);
 
         VscApi.postMessage({
             type: Messages.CONFIG_REQUEST,
