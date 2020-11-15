@@ -65,8 +65,6 @@ export default class StateProvider {
             });
         }
 
-        console.log(`Mam config ${state.category}`);
-
         VscApi.setState(state);
         this._onChangeListener(state);
     };

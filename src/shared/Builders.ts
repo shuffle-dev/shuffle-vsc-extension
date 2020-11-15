@@ -8,7 +8,7 @@ export class Builders {
     static readonly TAILWIND: BuilderType = {
         id: 'tailwind',
         name: 'Tailwind Builder',
-        url: 'https://tailwind.build/components/js/27db_components.js?v=tailwind-mn20'
+        url: 'https://tailwind.build/components/js/1453_components.js?v=mn20'
     };
 
     static readonly BOOTSTRAP: BuilderType = {

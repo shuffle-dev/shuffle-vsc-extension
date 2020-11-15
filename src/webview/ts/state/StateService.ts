@@ -74,8 +74,6 @@ export default class StateService {
         // @ToDo change to create url with apiKey
         const url = builder.url;
 
-        console.log('CONFIG REQUEST: ' + url);
-
         VscApi.postMessage({
             type: Messages.CONFIG_REQUEST,
             url,

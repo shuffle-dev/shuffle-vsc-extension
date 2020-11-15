@@ -37,7 +37,6 @@ export default class VscApi {
     };
 
     static setState = (state: State) => {
-        console.log(`Change state: ${state.category}`);
         VscApi.getApi().setState(state);
     };
 
@@ -46,9 +45,6 @@ export default class VscApi {
         if (currentState === undefined) {
             return;
         }
-
-        console.log(`Change state2: ${state.category}`);
-
 
         Object.keys(state).forEach(key => state[key] === undefined && delete state[key]);
 
