@@ -1,8 +1,9 @@
 import MessageManager from './MessageManager';
 import StateService from './state/StateService';
-import StateProvider, {State} from './state/StateProvider';
+import StateProvider from './state/StateProvider';
 import UIManager from './ui/UIManager';
 import { Builders } from "../../shared/Builders";
+import { State } from "../../shared/Types";
 
 const initialState: State = {
     apiKey: '',

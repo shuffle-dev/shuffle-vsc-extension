@@ -16,6 +16,7 @@ export default class HeaderManager {
         this._apiSaveButton = document.querySelector<HTMLButtonElement>('#apiSaveButton');
 
         this._setCurrentBuilderActive();
+        this._setCurrentApiSettings();
     };
 
     public bindEvents = () => {
@@ -41,6 +42,17 @@ export default class HeaderManager {
         this._setCurrentBuilderActive();
     };
 
+    private _handleFetchButtonClick = () => {
+        const apiKey = this._apiKeyInput?.value;
+
+        if (apiKey === undefined) {
+            return;
+        }
+
+        this._stateService.changeApiKey(apiKey);
+        this._stateService.fetchConfig();
+    };
+
     private _setCurrentBuilderActive = () => {
       const builders = this._buildersContainer?.querySelectorAll('button[data-id]');
 
@@ -57,14 +69,10 @@ export default class HeaderManager {
           ?.classList.add('active');
     };
 
-    private _handleFetchButtonClick = () => {
-        const apiKey = this._apiKeyInput?.value;
-
-        if (apiKey === undefined) {
-            return;
+    private _setCurrentApiSettings = () => {
+        if (this._apiKeyInput) {
+            const apiKey = this._stateService.getApiKey();
+            this._apiKeyInput.value = apiKey;
         }
-
-        this._stateService.changeApiKey(apiKey);
-        this._stateService.fetchConfig();
     };
 }
