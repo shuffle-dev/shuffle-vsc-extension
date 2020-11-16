@@ -32,14 +32,17 @@ export default class VscApi {
         VscApi.getApi().postMessage(message);
     };
 
+    /**
+     * State managment
+     */
     static getState = (): State => {
         return VscApi.getApi().getState();
     };
 
-    static setState = (state: State, store: boolean = true) => {
+    static setState = (state: State, persistStore: boolean = true) => {
         VscApi.getApi().setState(state);
 
-        if (store) {
+        if (persistStore) {
             const message : ShuffleStateStoreMessage = {
                 type: Messages.SHUFFLE_STATE_STORE,
                 state
@@ -51,6 +54,7 @@ export default class VscApi {
 
     static changeState = (state: PartialState) => {
         const currentState = VscApi.getState();
+
         if (currentState === undefined) {
             return;
         }

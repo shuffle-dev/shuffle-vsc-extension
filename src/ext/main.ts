@@ -4,11 +4,7 @@ import MainPanel from './MainPanel';
 export function activate(context: vscode.ExtensionContext) {
     
     let disposable = vscode.commands.registerCommand('shuffle.window', () => {
-        if (MainPanel.currentPanel) {
-            MainPanel.currentPanel.hide();
-        } else {
-            MainPanel.createOrShow(context);
-        }
+        MainPanel.shuffleWindow(context);
     });
 
     context.subscriptions.push(disposable);
@@ -22,4 +18,4 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
-console.log('READY ext!');
+console.log('Extension ready!');

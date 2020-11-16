@@ -13,4 +13,4 @@ const stateProvider = new StateProvider((state) => {
     uiManager.update();
 });
 
-console.log('READY webview!');
+console.log('Webview ready!');

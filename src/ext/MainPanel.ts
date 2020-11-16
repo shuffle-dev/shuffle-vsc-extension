@@ -27,7 +27,12 @@ export default class MainPanel {
         this._restoreShuffleState();
     }
 
-    public static createOrShow(context: vscode.ExtensionContext) {
+    /**
+     * Create or hide Shuffle extension window
+     *
+     * @param context
+     */
+    public static shuffleWindow(context: vscode.ExtensionContext) {
         const column = vscode.ViewColumn.Beside;
 
         if (MainPanel.currentPanel) {
@@ -58,6 +63,9 @@ export default class MainPanel {
         this._disposables.forEach(item => item.dispose());
     }
 
+    /**
+     * Restore last state from persist store
+     */
     private _restoreShuffleState() {
         const state = this.context.globalState.get('shuffle-state') as State;
         let hasComponents = true;
