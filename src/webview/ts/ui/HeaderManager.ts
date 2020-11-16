@@ -3,33 +3,36 @@ import VscApi from '../utils/VscApi';
 import { Messages, ShowErrorMessage } from '../../../shared/Messages';
 
 export default class HeaderManager {
-    private readonly _buildersContainer: HTMLDivElement | null;
+    private readonly _editorsContainer: HTMLDivElement | null;
     private readonly _apiEmailInput: HTMLInputElement | null;
     private readonly _apiKeyInput: HTMLInputElement | null;
     private readonly _apiSaveButton: HTMLButtonElement | null;
+    private readonly _toggleSettings: HTMLButtonElement | null;
 
     private _stateService: StateService;
 
     constructor(configService: StateService) {
         this._stateService = configService;
-        this._buildersContainer = document.querySelector<HTMLDivElement>('#buildersContainer');
+        this._editorsContainer = document.querySelector<HTMLDivElement>('#editorsContainer');
         this._apiEmailInput = document.querySelector<HTMLInputElement>('#apiEmailInput');
         this._apiKeyInput = document.querySelector<HTMLInputElement>('#apiKeyInput');
         this._apiSaveButton = document.querySelector<HTMLButtonElement>('#apiSaveButton');
+        this._toggleSettings = document.querySelector<HTMLButtonElement>('#toggleSettings');
         this.updateInterface();
     };
 
     public bindEvents = () => {
-        this._buildersContainer?.addEventListener('click', this._handleBuilderChange);
+        this._editorsContainer?.addEventListener('click', this._handleEditorChange);
         this._apiSaveButton?.addEventListener('click', this._handleFetchButtonClick);
+        this._toggleSettings?.addEventListener('click', this._handleToggleSettings);
     };
 
     public updateInterface = () => {
-        this._setCurrentBuilderActive();
-        this._setCurrentApiSettings();
+        this._setActiveEditor();
+        this._setApiSettings();
     };
 
-    private _handleBuilderChange = (e: MouseEvent) => {
+    private _handleEditorChange = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
         const button = target.closest('button[data-id]');
 
@@ -37,14 +40,14 @@ export default class HeaderManager {
             return;
         }
 
-        const builderId = button.getAttribute('data-id');
-        if (builderId === null) {
+        const editorId = button.getAttribute('data-id');
+        if (editorId === null) {
             return;
         }
 
-        this._stateService.changeBuilder(builderId);
+        this._stateService.changeEditor(editorId);
         this._stateService.fetchConfig();
-        this._setCurrentBuilderActive();
+        this._setActiveEditor();
     };
 
     private _handleFetchButtonClick = () => {
@@ -65,31 +68,54 @@ export default class HeaderManager {
         this._stateService.fetchConfig();
     };
 
-    private _setCurrentBuilderActive = () => {
-      const builders = this._buildersContainer?.querySelectorAll('button[data-id]');
-
-      if(!builders) {
-          return;
-      }
-
-      builders.forEach(item => item.classList.remove('active'));
-
-      const builder = this._stateService.getBuilder();
-
-      Array.from(builders)
-          .find(item => item.getAttribute('data-id') === builder.id)
-          ?.classList.add('active');
-    };
-
-    private _setCurrentApiSettings = () => {
-        if (this._apiKeyInput) {
-            const apiKey = this._stateService.getApiKey();
-            this._apiKeyInput.value = apiKey;
+    private _handleToggleSettings = () => {
+        const el = document.querySelector<HTMLDivElement>('#settings');
+        if (!el) {
+            return;
         }
 
-        if (this._apiEmailInput) {
-            const apiEmail = this._stateService.getApiEmail();
-            this._apiEmailInput.value = apiEmail;
+        if (el.classList.contains('hidden')) {
+            el.classList.remove('hidden');
+        } else {
+            el.classList.add('hidden');
         }
     };
+
+    /**
+     * Update interface
+     */
+    private _setActiveEditor = () => {
+        const editors = this._editorsContainer?.querySelectorAll('button[data-id]');
+  
+        if (!editors) {
+            return;
+        }
+  
+        editors.forEach(item => item.classList.remove('active'));
+  
+        const editor = this._stateService.getActiveEditor();
+  
+        Array.from(editors)
+            .find(item => item.getAttribute('data-id') === editor.id)
+            ?.classList.add('active');
+      };
+  
+      private _setApiSettings = () => {
+          let apiKey;
+          let apiEmail;
+  
+          if (this._apiKeyInput) {
+              apiKey = this._stateService.getApiKey();
+              this._apiKeyInput.value = apiKey;
+          }
+  
+          if (this._apiEmailInput) {
+              apiEmail = this._stateService.getApiEmail();
+              this._apiEmailInput.value = apiEmail;
+          }
+  
+          if (apiEmail && apiKey) {
+              document.querySelector<HTMLDivElement>('#settings').classList.add('hidden');
+          }
+      };
 }

@@ -1,5 +1,5 @@
 import { Message, Messages } from './Messages';
-import {  BuilderType } from './Builders';
+import {  EditorType } from './Editors';
 
 export type Component = {
     id: string,
@@ -20,11 +20,23 @@ export type MessageListener = {
 /**
  * Shuffle extension state
  */
+export type UILibrary = {
+    name: string,
+    url: string
+};
+
+export type Editor = {
+    id: string,
+    name: string,
+    libraries: UILibrary[]
+};
+
 type IState = { [index: string]: any };
 export type State = IState & {
     apiKey: string,
     apiEmail: string,
-    builder: BuilderType,
+    editors: Editor[],
+    activeEditor: EditorType,
     category: string,
     config: Config,
 };

@@ -35,8 +35,34 @@
     text-align: center;
 }
 
+.hidden {
+    display: none;
+}
+
+.cog-icon {
+    margin-bottom: .5rem;
+
+    button {
+        border-radius: 4px;
+        padding: .5rem .75rem;
+        background-color: transparent;
+        display: flex;
+        align-items: center;
+        width: auto;
+        margin-left: auto;
+
+        &:hover {
+            background-color: #2F2F2F;
+        }
+
+        span {
+            margin-right: .5rem;
+        }
+    }
+}
+
 /* Select editor */
-#buildersContainer {
+#editorsContainer {
     display: flex;
     flex-wrap: wrap;
     background-color: rgba(#1D1D1D, 0.6);
@@ -65,7 +91,7 @@
 }
 
 /* Select category */
-#selectContainer {
+#categoryContainer {
     margin-bottom: 1rem;
     margin-left: .75rem;
 

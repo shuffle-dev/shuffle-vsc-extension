@@ -1,5 +1,5 @@
 import VscApi from '../utils/VscApi';
-import { Builders } from '../../../shared/Builders';
+import { Editors } from '../../../shared/Editors';
 import { ConfigRequestMessage, Messages } from '../../../shared/Messages';
 import { PartialState, State, Component } from '../../../shared/Types';
 
@@ -11,9 +11,43 @@ export default class StateService {
         VscApi.setState(state);
     }
 
+    public fetchConfig = () => {
+        const { activeEditor, apiKey } = this._state;
+        // @ToDo change to create url with apiKey
+        const url = activeEditor.url;
+
+        const message : ConfigRequestMessage = {
+            type: Messages.CONFIG_REQUEST,
+            url
+        };
+
+        VscApi.postMessage(message);
+    };
+
+    /**
+     * Wrappers for VscApi
+     */
     public setState = (state: State) => {
         this._state = state;
         VscApi.setState(state);
+    };
+
+    private _changeState = (state: PartialState) => {
+        VscApi.changeState(state);
+        this._state = VscApi.getState() as State;
+    };
+
+    /**
+     * Wrappers for _changeState
+     */
+    public changeEditor = (id: string) => {
+        const activeEditor = Editors.getEditor(id);
+
+        if (activeEditor === undefined) {
+            return;
+        }
+
+        this._changeState({ activeEditor });
     };
 
     public changeCategory = (category: string) => {
@@ -24,36 +58,9 @@ export default class StateService {
         this._changeState({ apiKey, apiEmail });
     };
 
-    public changeBuilder = (id: string) => {
-        const builder = Builders.getBuilder(id);
-        if (builder === undefined) {
-            return;
-        }
-
-        this._changeState({ builder });
-    };
-
-    public getComponents = (category?: string): Component[] => {
-        const currentCategory = category === undefined ? this.getCategory() : category;
-        const components = this._state.config[currentCategory];
-        return components === undefined ? [] : components;
-    };
-
-    public getComponent = (id: string, category?: string): Component | null => {
-        const components = this.getComponents(category);
-
-        const component = components.find((elem) => elem.id === id);
-        return component ? component : null;
-    };
-
-    public getCategories = () => {
-        return Object.keys(this._state.config);
-    };
-
-    public getCategory = () => {
-        return this._state.category;
-    };
-
+    /**
+     * Getters for current state
+     */
     public getApiKey = () => {
         return this._state.apiKey;
     };
@@ -62,23 +69,29 @@ export default class StateService {
         return this._state.apiEmail;
     };
 
-    public getBuilder = () => {
-        return this._state.builder;
+    public getActiveEditor = () => {
+        return this._state.activeEditor;
     };
 
-    private _changeState = (state: PartialState) => {
-        VscApi.changeState(state);
-        this._state = VscApi.getState() as State;
+    public getCategory = () => {
+        return this._state.category;
     };
 
-    public fetchConfig = () => {
-        const { builder, apiKey } = this._state;
-        // @ToDo change to create url with apiKey
-        const url = builder.url;
+    public getCategories = () => {
+        return Object.keys(this._state.config);
+    };
 
-        VscApi.postMessage({
-            type: Messages.CONFIG_REQUEST,
-            url,
-        } as ConfigRequestMessage);
+    public getComponents = (category?: string): Component[] => {
+        const currentCategory = category === undefined ? this.getCategory() : category;
+        const components = this._state.config[currentCategory];
+
+        return components === undefined ? [] : components;
+    };
+
+    public getComponent = (id: string, category?: string): Component | null => {
+        const components = this.getComponents(category);
+        const component = components.find((elem) => elem.id === id);
+
+        return component ? component : null;
     };
 }

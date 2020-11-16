@@ -3,14 +3,14 @@ import VscApi from '../utils/VscApi';
 import { Messages, SourceRequestMessage } from '../../../shared/Messages';
 
 export default class ComponentsManager {
-    private readonly _selectContainer: HTMLDivElement | null;
+    private readonly _categoryContainer: HTMLDivElement | null;
     private readonly _componentsContainer: HTMLDivElement | null;
 
     private _stateService: StateService;
 
     constructor(configService: StateService) {
         this._stateService = configService;
-        this._selectContainer = document.querySelector<HTMLDivElement>('#selectContainer');
+        this._categoryContainer = document.querySelector<HTMLDivElement>('#categoryContainer');
         this._componentsContainer = document.querySelector<HTMLDivElement>('#componentsContainer');
     };
 
@@ -19,19 +19,15 @@ export default class ComponentsManager {
     };
 
     public createStructure = () => {
-        this._createSelect();
+        this._createCategorySelect();
         this._createComponents();
     };
 
-    private _createSelect = () => {
-        this._clearSelect();
-        const select = document.createElement('select');
-        select.addEventListener('change', this._handleSelectChange);
-        this._createSelectOptions(select);
-        this._selectContainer?.appendChild(select);
-    };
+    private _createCategorySelect = () => {
+        this._clearCategorySelect();
 
-    private _createSelectOptions = (select: HTMLSelectElement) => {
+        const select = document.createElement('select');
+
         const currentCategory = this._stateService.getCategory();
         const categories = this._stateService.getCategories();
 
@@ -46,12 +42,9 @@ export default class ComponentsManager {
 
             select.appendChild(option);
         });
-    };
 
-    private _handleSelectChange = (e: Event) => {
-        const category = (e.target as HTMLInputElement).value;
-        this._stateService.changeCategory(category);
-        this._createComponents();
+        select.addEventListener('change', this._handleCategoryChange);
+        this._categoryContainer?.appendChild(select);
     };
 
     private _createComponents = () => {
@@ -61,7 +54,7 @@ export default class ComponentsManager {
 
         components.map((component) => {
             const elem = document.createElement('img');
-            elem.setAttribute('src', `https://tailwind.build/${component.preview}`);
+            elem.setAttribute('src', `https://bootstrapshuffle.com/${component.preview}`);
             elem.setAttribute('data-id', component.id);
             elem.classList.add('component-img');
 
@@ -69,9 +62,9 @@ export default class ComponentsManager {
         });
     };
 
-    private _clearSelect = () => {
-        if(this._selectContainer !== null) {
-            this._selectContainer.innerHTML = '';
+    private _clearCategorySelect = () => {
+        if(this._categoryContainer !== null) {
+            this._categoryContainer.innerHTML = '';
         }
     };
 
@@ -81,13 +74,19 @@ export default class ComponentsManager {
         }
     };
 
+    /**
+     * Handle Events
+     */
+    private _handleCategoryChange = (e: Event) => {
+        const category = (e.target as HTMLInputElement).value;
+        this._stateService.changeCategory(category);
+        this._createComponents();
+    };
+
     private _handleComponentClick = (e: MouseEvent) => {
         const target = e.target as HTMLImageElement;
-        if (target.tagName.toUpperCase() !== 'IMG') {
-            return;
-        }
-
         const id = target.getAttribute('data-id');
+
         if (id === null) {
             return;
         }
@@ -102,4 +101,5 @@ export default class ComponentsManager {
             data: component.html
         } as SourceRequestMessage);
     };
+
 }

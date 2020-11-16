@@ -73,10 +73,10 @@ export default class MainPanel {
         }
 
         if (!state || !hasComponents) {
-            let url = initialState.builder.url;
+            let url = initialState.activeEditor.url;
 
-            if (state && state.builder) {
-                url = state.builder.url;
+            if (state && state.activeEditor) {
+                url = state.activeEditor.url;
             }
 
             const message : ConfigRequestMessage = {

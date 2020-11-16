@@ -10,7 +10,7 @@ export default class StateProvider {
 
     constructor(onChange: OnChangeCallback) {
         this._onChangeListener = onChange;
-        MessageManager.on(Messages.CONFIG_RESPONSE, this.receiveConfig);
+        MessageManager.on(Messages.CONFIG_RESPONSE, this._receivedConfig);
         MessageManager.on(Messages.SHUFFLE_STATE_RESTORE, this._restoreState);
     }
 
@@ -20,7 +20,7 @@ export default class StateProvider {
         this._onChangeListener(state);
     };
 
-    private receiveConfig = (message: Message) => {
+    private _receivedConfig = (message: Message) => {
         const { data: config } = message as ConfigResponseMessage;
         const currentState = VscApi.getState();
 
