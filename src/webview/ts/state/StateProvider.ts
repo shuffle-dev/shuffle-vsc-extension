@@ -1,7 +1,7 @@
 import VscApi from '../utils/VscApi';
 import MessageManager from '../MessageManager';
 import { State } from '../../../shared/Types';
-import { ShuffleStateRestoreMessage, ConfigRequestMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
+import { ShuffleStateRestoreMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
 
 type OnChangeCallback = (config: State) => void;
 
@@ -30,7 +30,6 @@ export default class StateProvider {
             config
         };
 
-        VscApi.setState(state);
         this._onChangeListener(state);
     };
 }

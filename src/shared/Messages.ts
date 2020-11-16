@@ -3,7 +3,7 @@ import { Config, State } from './Types';
 export enum Messages {
     SHUFFLE_STATE_STORE = 'shuffle-state:store',
     SHUFFLE_STATE_RESTORE = 'shuffle-state:restore',
-    CONFIG_REQUEST = 'config:reqquest',
+    CONFIG_REQUEST = 'config:request',
     CONFIG_RESPONSE = 'config:response',
     SOURCE_REQUEST = 'source:reqquest',
     SHOW_ERROR = 'show:error',
