@@ -46,7 +46,7 @@ export default class HeaderManager {
         }
 
         this._stateService.changeEditor(editorId);
-        this._stateService.fetchConfig();
+        this._stateService.fetchComponents();
         this._setActiveEditor();
     };
 
@@ -65,7 +65,7 @@ export default class HeaderManager {
         }
 
         this._stateService.changeApiDetails(apiKey, apiEmail);
-        this._stateService.fetchConfig();
+        this._stateService.fetchComponents();
     };
 
     private _handleToggleSettings = () => {
@@ -95,15 +95,17 @@ export default class HeaderManager {
   
         const editor = this._stateService.getActiveEditor();
   
-        Array.from(editors)
-            .find(item => item.getAttribute('data-id') === editor.id)
-            ?.classList.add('active');
+        if (editor) {
+            Array.from(editors)
+                .find(item => item.getAttribute('data-id') === editor.id)
+                ?.classList.add('active');
+        }
       };
   
       private _setApiSettings = () => {
-          let apiKey;
-          let apiEmail;
-  
+          let apiKey : string;
+          let apiEmail : string;
+
           if (this._apiKeyInput) {
               apiKey = this._stateService.getApiKey();
               this._apiKeyInput.value = apiKey;

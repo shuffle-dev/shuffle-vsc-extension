@@ -1,10 +1,9 @@
 import { Message, Messages } from './Messages';
-import {  EditorType } from './Editors';
 
 export type Component = {
     id: string,
     preview: string,
-    html: string,
+    code: string,
 };
 
 export type Components = {
@@ -32,14 +31,20 @@ export type Editor = {
 
 type IState = { [index: string]: any };
 export type State = IState & {
+    mode: string,
     apiKey: string,
     apiEmail: string,
     editors: Editor[],
-    activeEditor: EditorType,
+    activeEditor: Editor | null,
     category: string,
     components: Components,
 };
 
 export type PartialState = {
     [T in keyof State]?: State[T]
+};
+
+export type ServerState = {
+    mode: string,
+    editors: Editor[]
 };

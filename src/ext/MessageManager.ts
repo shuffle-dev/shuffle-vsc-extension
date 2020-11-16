@@ -3,6 +3,8 @@ import fetch from 'node-fetch';
 import { writeSync as writeSyncToClipboard } from 'clipboardy';
 import MainPanel from './MainPanel';
 import {
+    ShuffleStateFetchMessage,
+    ShuffleStateResponseMessage,
     ShuffleStateStoreMessage,
     ComponentsRequestMessage,
     ComponentsResponseMessage,
@@ -22,6 +24,7 @@ export default class MessageManager {
         this.mainPanel = mainPanel;
         this._listeners = [
             { type: Messages.SHUFFLE_STATE_STORE, callback: this._storeState },
+            { type: Messages.SHUFFLE_STATE_FETCH, callback: this._fetchState },
             { type: Messages.COMPONENTS_REQUEST, callback: this._fetchComponents },
             { type: Messages.COMPONENT_CODE_REQUEST, callback: this._copyToClipboard },
             { type: Messages.SHOW_ERROR, callback: this._showError },
@@ -44,19 +47,41 @@ export default class MessageManager {
         this.mainPanel.context.globalState.update('shuffle-state', state);
     };
 
+    private _fetchState = (message: Message) => {
+        const { apiKey, apiEmail } = message as ShuffleStateFetchMessage;
+        const url = `http://bs.local/api/state?api_key=${apiKey}&email=${apiEmail}`;
+
+        fetch(url)
+            .then((res) => res.text())
+            .then(res => {
+                const json = JSON.parse(res);
+                
+                if (json.editors) {
+                    const message : ShuffleStateResponseMessage = {
+                        type: Messages.SHUFFLE_STATE_RESPONSE,
+                        serverState: json
+                    };
+    
+                    this.postMessage(message);
+                }
+            })
+            .catch(e => {
+                vscode.window.showErrorMessage('Shuffle: Cannot fetch the state.');
+                console.error(e);
+            });
+    };
+
     private _fetchComponents = (message: Message) => {
         const { url } = message as ComponentsRequestMessage;
 
         fetch(url)
             .then((res) => res.text())
             .then(res => {
-                const firstEqualPosition = res.indexOf('=');
-                const validJsonConfig = res.substring(firstEqualPosition+1).trim().slice(0, -1) + '\n';
-                const jsonConfig = JSON.parse(validJsonConfig);
+                const jsonConfig = JSON.parse(res);
 
                 this.postMessage({
                     type: Messages.COMPONENTS_RESPONSE,
-                    components: jsonConfig
+                    components: jsonConfig.components
                 } as ComponentsResponseMessage);
             })
             .catch(e => {

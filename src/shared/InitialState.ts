@@ -1,11 +1,11 @@
 import { State } from './Types';
-import { Editors } from './Editors';
 
 export const initialState : State = {
+    mode: 'demo',
     apiKey: '',
     apiEmail: '',
     editors: [],
-    activeEditor: Editors.getDefault(),
+    activeEditor: null,
     category: '',
     components: {}
 };

@@ -1,5 +1,4 @@
 import VscApi from '../utils/VscApi';
-import { Editors } from '../../../shared/Editors';
 import { ComponentsRequestMessage, Messages } from '../../../shared/Messages';
 import { PartialState, State, Component } from '../../../shared/Types';
 
@@ -11,10 +10,12 @@ export default class StateService {
         VscApi.setState(state);
     }
 
-    public fetchConfig = () => {
-        const { activeEditor, apiKey } = this._state;
+    public fetchComponents = () => {
+        const { activeEditor } = this._state;
         // @ToDo change to create url with apiKey
-        const url = activeEditor.url;
+        const url = activeEditor.libraries[0].url;
+
+        console.log(`FETCH ${url}`);
 
         const message : ComponentsRequestMessage = {
             type: Messages.COMPONENTS_REQUEST,
@@ -41,7 +42,7 @@ export default class StateService {
      * Wrappers for _changeState
      */
     public changeEditor = (id: string) => {
-        const activeEditor = Editors.getEditor(id);
+        const activeEditor = this.getEditor(id);
 
         if (activeEditor === undefined) {
             return;
@@ -67,6 +68,14 @@ export default class StateService {
 
     public getApiEmail = () => {
         return this._state.apiEmail;
+    };
+
+    public getEditors = () => {
+        return this._state.editors;
+    };
+
+    public getEditor = (id: string) => {
+        return this.getEditors().find(item => id === item.id);
     };
 
     public getActiveEditor = () => {

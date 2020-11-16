@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 import MessageManager from './MessageManager';
-import { Messages, ShuffleStateRestoreMessage, ComponentsRequestMessage } from '../shared/Messages';
+import { Messages, ShuffleStateFetchMessage, ShuffleStateRestoreMessage, ComponentsRequestMessage } from '../shared/Messages';
 import { State } from '../shared/Types';
 import { initialState } from '../shared/InitialState';
 
@@ -80,16 +80,14 @@ export default class MainPanel {
             hasComponents = Object.keys(state.components).length > 0;
         }
 
-        if (!state || !hasComponents) {
-            let url = initialState.activeEditor.url;
+        if (true || !state || !hasComponents) {
+            const apiKey = state.apiKey ? state.apiKey : initialState.apiKey;
+            const apiEmail = state.apiEmail ? state.apiEmail : initialState.apiEmail;
 
-            if (state && state.activeEditor) {
-                url = state.activeEditor.url;
-            }
-
-            const message : ComponentsRequestMessage = {
-                type: Messages.COMPONENTS_REQUEST,
-                url,
+            const message : ShuffleStateFetchMessage = {
+                type: Messages.SHUFFLE_STATE_FETCH,
+                apiKey,
+                apiEmail
             };
 
             // Force components load
@@ -117,7 +115,7 @@ export default class MainPanel {
             <head>
                 <meta charset="UTF-8">
                 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https: ws:; style-src ${webview.cspSource};
-                    img-src ${webview.cspSource} https:; script-src ${webview.cspSource};">
+                    img-src ${webview.cspSource} http: https:; script-src ${webview.cspSource};">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
                 <link href="${styleUri}" rel="stylesheet">

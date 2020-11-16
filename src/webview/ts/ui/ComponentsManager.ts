@@ -53,12 +53,30 @@ export default class ComponentsManager {
         const components = this._stateService.getComponents();
 
         components.map((component) => {
-            const elem = document.createElement('img');
-            elem.setAttribute('src', `https://bootstrapshuffle.com/${component.preview}`);
-            elem.setAttribute('data-id', component.id);
-            elem.classList.add('component-img');
+            const wrapper = document.createElement('a');
+            wrapper.classList.add('component-wrapper');
 
-            this._componentsContainer?.appendChild(elem);
+            if (component.code) {
+                wrapper.href = '#';
+            } else {
+                wrapper.href = 'https://tailwind.build';
+                wrapper.target = '_blank';
+
+                const needsPro = document.createElement('div');
+                needsPro.classList.add('needs-pro');
+                wrapper.appendChild(needsPro);
+            }
+
+            const preview = document.createElement('img');
+            preview.setAttribute('src', `${component.preview}`);
+            preview.classList.add('component-img');
+
+            if (component.code) {
+                preview.setAttribute('data-id', component.id);
+            }
+
+            wrapper.appendChild(preview);
+            this._componentsContainer?.appendChild(wrapper);
         });
     };
 
@@ -98,7 +116,7 @@ export default class ComponentsManager {
 
         VscApi.postMessage({
             type: Messages.COMPONENT_CODE_REQUEST,
-            data: component.html
+            data: component.code
         } as ComponentCodeRequestMessage);
     };
 
