@@ -4,11 +4,11 @@ import { writeSync as writeSyncToClipboard } from 'clipboardy';
 import MainPanel from './MainPanel';
 import {
     ShuffleStateStoreMessage,
-    ConfigRequestMessage,
-    ConfigResponseMessage,
+    ComponentsRequestMessage,
+    ComponentsResponseMessage,
     Message,
     Messages,
-    SourceRequestMessage,
+    ComponentCodeRequestMessage,
     ShowErrorMessage,
     ShowInformationMessage,
 } from '../shared/Messages';
@@ -22,8 +22,8 @@ export default class MessageManager {
         this.mainPanel = mainPanel;
         this._listeners = [
             { type: Messages.SHUFFLE_STATE_STORE, callback: this._storeState },
-            { type: Messages.CONFIG_REQUEST, callback: this._fetchConfig },
-            { type: Messages.SOURCE_REQUEST, callback: this._copyToClipboard },
+            { type: Messages.COMPONENTS_REQUEST, callback: this._fetchConfig },
+            { type: Messages.COMPONENT_CODE_REQUEST, callback: this._copyToClipboard },
             { type: Messages.SHOW_ERROR, callback: this._showError },
             { type: Messages.SHOW_INFORMATION, callback: this._showInformation }
         ];
@@ -45,7 +45,7 @@ export default class MessageManager {
     };
 
     private _fetchConfig = (message: Message) => {
-        const { url } = message as ConfigRequestMessage;
+        const { url } = message as ComponentsRequestMessage;
 
         fetch(url)
             .then((res) => res.text())
@@ -55,9 +55,9 @@ export default class MessageManager {
                 const jsonConfig = JSON.parse(validJsonConfig);
 
                 this.postMessage({
-                    type: Messages.CONFIG_RESPONSE,
+                    type: Messages.COMPONENTS_RESPONSE,
                     data: jsonConfig
-                } as ConfigResponseMessage);
+                } as ComponentsResponseMessage);
             })
             .catch(e => {
                 vscode.window.showErrorMessage('Shuffle: Cannot fetch config file');
@@ -66,7 +66,7 @@ export default class MessageManager {
     };
 
     private _copyToClipboard = (message: Message) => {
-        const { data } = message as SourceRequestMessage;
+        const { data } = message as ComponentCodeRequestMessage;
         writeSyncToClipboard(data);
         vscode.window.showInformationMessage('Copied to clipboard!');
     };

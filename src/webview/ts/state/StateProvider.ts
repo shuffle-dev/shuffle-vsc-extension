@@ -1,7 +1,7 @@
 import VscApi from '../utils/VscApi';
 import MessageManager from '../MessageManager';
 import { State } from '../../../shared/Types';
-import { ShuffleStateRestoreMessage, ConfigResponseMessage, Message, Messages } from '../../../shared/Messages';
+import { ShuffleStateRestoreMessage, ComponentsResponseMessage, Message, Messages } from '../../../shared/Messages';
 
 type OnChangeCallback = (config: State) => void;
 
@@ -10,7 +10,7 @@ export default class StateProvider {
 
     constructor(onChange: OnChangeCallback) {
         this._onChangeListener = onChange;
-        MessageManager.on(Messages.CONFIG_RESPONSE, this._receivedConfig);
+        MessageManager.on(Messages.COMPONENTS_RESPONSE, this._receivedConfig);
         MessageManager.on(Messages.SHUFFLE_STATE_RESTORE, this._restoreState);
     }
 
@@ -21,7 +21,7 @@ export default class StateProvider {
     };
 
     private _receivedConfig = (message: Message) => {
-        const { data: config } = message as ConfigResponseMessage;
+        const { data: config } = message as ComponentsResponseMessage;
         const currentState = VscApi.getState();
 
         const state: State = {

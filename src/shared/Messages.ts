@@ -3,9 +3,9 @@ import { Config, State } from './Types';
 export enum Messages {
     SHUFFLE_STATE_STORE = 'shuffle-state:store',
     SHUFFLE_STATE_RESTORE = 'shuffle-state:restore',
-    CONFIG_REQUEST = 'config:request',
-    CONFIG_RESPONSE = 'config:response',
-    SOURCE_REQUEST = 'source:reqquest',
+    COMPONENTS_REQUEST = 'components:request',
+    COMPONENTS_RESPONSE = 'components:response',
+    COMPONENT_CODE_REQUEST = 'component:code:request',
     SHOW_ERROR = 'show:error',
     SHOW_INFORMATION = 'show:information',
 }
@@ -24,18 +24,18 @@ export interface ShuffleStateRestoreMessage extends Message {
     state: State
 }
 
-export interface ConfigRequestMessage extends Message {
-    type: Messages.CONFIG_REQUEST
+export interface ComponentsRequestMessage extends Message {
+    type: Messages.COMPONENTS_REQUEST
     url: string
 }
 
-export interface ConfigResponseMessage extends Message {
-    type: Messages.CONFIG_RESPONSE
+export interface ComponentsResponseMessage extends Message {
+    type: Messages.COMPONENTS_RESPONSE
     data: Config
 }
 
-export interface SourceRequestMessage extends Message {
-    type: Messages.SOURCE_REQUEST
+export interface ComponentCodeRequestMessage extends Message {
+    type: Messages.COMPONENT_CODE_REQUEST
     data: string
 }
 

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
 import MessageManager from './MessageManager';
-import { Messages, ShuffleStateRestoreMessage, ConfigRequestMessage } from '../shared/Messages';
+import { Messages, ShuffleStateRestoreMessage, ComponentsRequestMessage } from '../shared/Messages';
 import { State } from '../shared/Types';
 import { initialState } from '../shared/InitialState';
 
@@ -87,8 +87,8 @@ export default class MainPanel {
                 url = state.activeEditor.url;
             }
 
-            const message : ConfigRequestMessage = {
-                type: Messages.CONFIG_REQUEST,
+            const message : ComponentsRequestMessage = {
+                type: Messages.COMPONENTS_REQUEST,
                 url,
             };
 

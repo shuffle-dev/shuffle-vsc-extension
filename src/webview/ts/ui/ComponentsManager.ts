@@ -1,6 +1,6 @@
 import StateService from '../state/StateService';
 import VscApi from '../utils/VscApi';
-import { Messages, SourceRequestMessage } from '../../../shared/Messages';
+import { Messages, ComponentCodeRequestMessage } from '../../../shared/Messages';
 
 export default class ComponentsManager {
     private readonly _categoryContainer: HTMLDivElement | null;
@@ -97,9 +97,9 @@ export default class ComponentsManager {
         }
 
         VscApi.postMessage({
-            type: Messages.SOURCE_REQUEST,
+            type: Messages.COMPONENT_CODE_REQUEST,
             data: component.html
-        } as SourceRequestMessage);
+        } as ComponentCodeRequestMessage);
     };
 
 }

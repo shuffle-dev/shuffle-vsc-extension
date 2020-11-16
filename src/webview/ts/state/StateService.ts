@@ -1,6 +1,6 @@
 import VscApi from '../utils/VscApi';
 import { Editors } from '../../../shared/Editors';
-import { ConfigRequestMessage, Messages } from '../../../shared/Messages';
+import { ComponentsRequestMessage, Messages } from '../../../shared/Messages';
 import { PartialState, State, Component } from '../../../shared/Types';
 
 export default class StateService {
@@ -16,8 +16,8 @@ export default class StateService {
         // @ToDo change to create url with apiKey
         const url = activeEditor.url;
 
-        const message : ConfigRequestMessage = {
-            type: Messages.CONFIG_REQUEST,
+        const message : ComponentsRequestMessage = {
+            type: Messages.COMPONENTS_REQUEST,
             url
         };
 
