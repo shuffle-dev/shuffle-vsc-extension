@@ -46,5 +46,6 @@ export type PartialState = {
 
 export type ServerState = {
     mode: string,
-    editors: Editor[]
+    editors: Editor[],
+    error: string
 };

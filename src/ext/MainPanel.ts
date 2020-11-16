@@ -80,7 +80,7 @@ export default class MainPanel {
             hasComponents = Object.keys(state.components).length > 0;
         }
 
-        if (true || !state || !hasComponents) {
+        if (!state || !hasComponents) {
             const apiKey = state.apiKey ? state.apiKey : initialState.apiKey;
             const apiEmail = state.apiEmail ? state.apiEmail : initialState.apiEmail;
 

@@ -1,7 +1,15 @@
 import VscApi from '../utils/VscApi';
 import MessageManager from '../MessageManager';
 import { State } from '../../../shared/Types';
-import { ShuffleStateRestoreMessage, ShuffleStateResponseMessage, ComponentsResponseMessage, Message, Messages } from '../../../shared/Messages';
+import {
+    ShuffleStateRestoreMessage,
+    ShuffleStateResponseMessage,
+    ComponentsRequestMessage,
+    ComponentsResponseMessage,
+    ShowErrorMessage,
+    Message,
+    Messages
+} from '../../../shared/Messages';
 
 type OnChangeCallback = (config: State) => void;
 
@@ -23,8 +31,23 @@ export default class StateProvider {
 
     private _receivedState = (message: Message) => {
         const { serverState } = message as ShuffleStateResponseMessage;
-
         const currentState = VscApi.getState();
+        
+        if (currentState.mode !== serverState.mode) {
+            const { activeEditor } = currentState;
+            const serverEditor = serverState.editors.find((editor) => editor.id === activeEditor.id);
+
+            if (serverEditor) {
+                const url = serverEditor.libraries[0].url;
+        
+                const message : ComponentsRequestMessage = {
+                    type: Messages.COMPONENTS_REQUEST,
+                    url
+                };
+        
+                VscApi.postMessage(message);
+            }
+        }
 
         const state: State = {
             ...currentState,
@@ -33,6 +56,15 @@ export default class StateProvider {
         };
 
         this._onChangeListener(state);
+        
+        if (serverState.error) {
+            const error : ShowErrorMessage = {
+                type: Messages.SHOW_ERROR,
+                message: serverState.error
+            };
+
+            VscApi.postMessage(error);
+        }
     };
 
     private _receivedConfig = (message: Message) => {

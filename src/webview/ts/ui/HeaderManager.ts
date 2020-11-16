@@ -1,6 +1,6 @@
 import StateService from '../state/StateService';
 import VscApi from '../utils/VscApi';
-import { Messages, ShowErrorMessage } from '../../../shared/Messages';
+import { Messages, ShuffleStateFetchMessage, ShowErrorMessage } from '../../../shared/Messages';
 
 export default class HeaderManager {
     private readonly _editorsContainer: HTMLDivElement | null;
@@ -65,7 +65,14 @@ export default class HeaderManager {
         }
 
         this._stateService.changeApiDetails(apiKey, apiEmail);
-        this._stateService.fetchComponents();
+
+        const message : ShuffleStateFetchMessage = {
+            type: Messages.SHUFFLE_STATE_FETCH,
+            apiKey,
+            apiEmail
+        };
+
+        VscApi.postMessage(message);
     };
 
     private _handleToggleSettings = () => {
@@ -115,7 +122,16 @@ export default class HeaderManager {
               apiEmail = this._stateService.getApiEmail();
               this._apiEmailInput.value = apiEmail;
           }
-  
+ 
+          const mode = this._stateService.getMode();
+          if (mode === 'demo') {
+              document.querySelector<HTMLDivElement>('.demo').classList.remove('hidden');
+              document.querySelector<HTMLDivElement>('.full').classList.add('hidden');
+          } else {
+              document.querySelector<HTMLDivElement>('.demo').classList.add('hidden');
+              document.querySelector<HTMLDivElement>('.full').classList.remove('hidden');
+          }
+
           if (apiEmail && apiKey) {
               document.querySelector<HTMLDivElement>('#settings').classList.add('hidden');
           }

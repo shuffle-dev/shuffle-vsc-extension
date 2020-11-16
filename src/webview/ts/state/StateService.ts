@@ -12,10 +12,7 @@ export default class StateService {
 
     public fetchComponents = () => {
         const { activeEditor } = this._state;
-        // @ToDo change to create url with apiKey
         const url = activeEditor.libraries[0].url;
-
-        console.log(`FETCH ${url}`);
 
         const message : ComponentsRequestMessage = {
             type: Messages.COMPONENTS_REQUEST,
@@ -62,6 +59,10 @@ export default class StateService {
     /**
      * Getters for current state
      */
+    public getMode = () => {
+        return this._state.mode;
+    };
+
     public getApiKey = () => {
         return this._state.apiKey;
     };

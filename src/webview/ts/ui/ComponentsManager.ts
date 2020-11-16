@@ -104,20 +104,21 @@ export default class ComponentsManager {
     private _handleComponentClick = (e: MouseEvent) => {
         const target = e.target as HTMLImageElement;
         const id = target.getAttribute('data-id');
-
+        
         if (id === null) {
             return;
         }
-
+        
         const component = this._stateService.getComponent(id);
         if (component === null) {
             return;
         }
 
-        VscApi.postMessage({
+        const message : ComponentCodeRequestMessage = {
             type: Messages.COMPONENT_CODE_REQUEST,
             data: component.code
-        } as ComponentCodeRequestMessage);
+        };
+ 
+        VscApi.postMessage(message);
     };
-
 }
