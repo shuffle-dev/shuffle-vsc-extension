@@ -77,7 +77,7 @@ export default class MainPanel {
             };
 
             this._messageManager.postMessage(message);
-            hasComponents = Object.keys(state.config).length > 0;
+            hasComponents = Object.keys(state.components).length > 0;
         }
 
         if (!state || !hasComponents) {
@@ -92,7 +92,7 @@ export default class MainPanel {
                 url,
             };
 
-            // Force config load
+            // Force components load
             this._messageManager.receiveMessage(message);
         }
     }

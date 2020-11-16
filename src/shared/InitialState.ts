@@ -7,5 +7,5 @@ export const initialState : State = {
     editors: [],
     activeEditor: Editors.getDefault(),
     category: '',
-    config: {}
+    components: {}
 };

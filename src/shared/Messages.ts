@@ -1,4 +1,4 @@
-import { Config, State } from './Types';
+import { Components, State } from './Types';
 
 export enum Messages {
     SHUFFLE_STATE_STORE = 'shuffle-state:store',
@@ -31,7 +31,7 @@ export interface ComponentsRequestMessage extends Message {
 
 export interface ComponentsResponseMessage extends Message {
     type: Messages.COMPONENTS_RESPONSE
-    data: Config
+    components: Components
 }
 
 export interface ComponentCodeRequestMessage extends Message {

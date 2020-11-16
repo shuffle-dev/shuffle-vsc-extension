@@ -11,8 +11,8 @@ export default class HeaderManager {
 
     private _stateService: StateService;
 
-    constructor(configService: StateService) {
-        this._stateService = configService;
+    constructor(stateService: StateService) {
+        this._stateService = stateService;
         this._editorsContainer = document.querySelector<HTMLDivElement>('#editorsContainer');
         this._apiEmailInput = document.querySelector<HTMLInputElement>('#apiEmailInput');
         this._apiKeyInput = document.querySelector<HTMLInputElement>('#apiKeyInput');

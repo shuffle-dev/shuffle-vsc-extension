@@ -22,7 +22,7 @@ export default class MessageManager {
         this.mainPanel = mainPanel;
         this._listeners = [
             { type: Messages.SHUFFLE_STATE_STORE, callback: this._storeState },
-            { type: Messages.COMPONENTS_REQUEST, callback: this._fetchConfig },
+            { type: Messages.COMPONENTS_REQUEST, callback: this._fetchComponents },
             { type: Messages.COMPONENT_CODE_REQUEST, callback: this._copyToClipboard },
             { type: Messages.SHOW_ERROR, callback: this._showError },
             { type: Messages.SHOW_INFORMATION, callback: this._showInformation }
@@ -44,7 +44,7 @@ export default class MessageManager {
         this.mainPanel.context.globalState.update('shuffle-state', state);
     };
 
-    private _fetchConfig = (message: Message) => {
+    private _fetchComponents = (message: Message) => {
         const { url } = message as ComponentsRequestMessage;
 
         fetch(url)
@@ -56,11 +56,11 @@ export default class MessageManager {
 
                 this.postMessage({
                     type: Messages.COMPONENTS_RESPONSE,
-                    data: jsonConfig
+                    components: jsonConfig
                 } as ComponentsResponseMessage);
             })
             .catch(e => {
-                vscode.window.showErrorMessage('Shuffle: Cannot fetch config file');
+                vscode.window.showErrorMessage('Shuffle: Cannot fetch components file.');
                 console.error(e);
             });
     };

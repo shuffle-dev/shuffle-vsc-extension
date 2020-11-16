@@ -78,12 +78,12 @@ export default class StateService {
     };
 
     public getCategories = () => {
-        return Object.keys(this._state.config);
+        return Object.keys(this._state.components);
     };
 
     public getComponents = (category?: string): Component[] => {
         const currentCategory = category === undefined ? this.getCategory() : category;
-        const components = this._state.config[currentCategory];
+        const components = this._state.components[currentCategory];
 
         return components === undefined ? [] : components;
     };

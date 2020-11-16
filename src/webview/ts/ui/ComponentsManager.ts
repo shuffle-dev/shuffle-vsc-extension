@@ -8,8 +8,8 @@ export default class ComponentsManager {
 
     private _stateService: StateService;
 
-    constructor(configService: StateService) {
-        this._stateService = configService;
+    constructor(stateService: StateService) {
+        this._stateService = stateService;
         this._categoryContainer = document.querySelector<HTMLDivElement>('#categoryContainer');
         this._componentsContainer = document.querySelector<HTMLDivElement>('#componentsContainer');
     };

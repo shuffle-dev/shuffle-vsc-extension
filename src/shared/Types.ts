@@ -5,10 +5,9 @@ export type Component = {
     id: string,
     preview: string,
     html: string,
-    config: object[]
 };
 
-export type Config = {
+export type Components = {
     [key: string]: Component[]
 };
 
@@ -38,7 +37,7 @@ export type State = IState & {
     editors: Editor[],
     activeEditor: EditorType,
     category: string,
-    config: Config,
+    components: Components,
 };
 
 export type PartialState = {

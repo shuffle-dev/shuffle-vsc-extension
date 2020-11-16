@@ -21,13 +21,15 @@ export default class StateProvider {
     };
 
     private _receivedConfig = (message: Message) => {
-        const { data: config } = message as ComponentsResponseMessage;
+        const { components } = message as ComponentsResponseMessage;
+
         const currentState = VscApi.getState();
+        const category = Object.keys(components).length > 0 ? Object.keys(components)[0] : '';
 
         const state: State = {
             ...currentState,
-            category: Object.keys(config)[0],
-            config
+            category,
+            components
         };
 
         this._onChangeListener(state);

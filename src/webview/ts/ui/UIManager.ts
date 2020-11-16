@@ -6,9 +6,9 @@ export default class UIManager {
     private _headerManager: HeaderManager;
     private _componentsManager: ComponentsManager;
 
-    constructor(configService: StateService) {
-        this._headerManager = new HeaderManager(configService);
-        this._componentsManager = new ComponentsManager(configService);
+    constructor(stateService: StateService) {
+        this._headerManager = new HeaderManager(stateService);
+        this._componentsManager = new ComponentsManager(stateService);
 
         this._headerManager.bindEvents();
         this._componentsManager.bindEvents();
