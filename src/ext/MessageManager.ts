@@ -9,6 +9,8 @@ import {
     Message,
     Messages,
     SourceRequestMessage,
+    ShowErrorMessage,
+    ShowInformationMessage,
 } from '../shared/Messages';
 import { MessageListener } from '../shared/Types';
 
@@ -22,6 +24,8 @@ export default class MessageManager {
             { type: Messages.SHUFFLE_STATE_STORE, callback: this._storeState },
             { type: Messages.CONFIG_REQUEST, callback: this._fetchConfig },
             { type: Messages.SOURCE_REQUEST, callback: this._copyToClipboard },
+            { type: Messages.SHOW_ERROR, callback: this._showError },
+            { type: Messages.SHOW_INFORMATION, callback: this._showInformation }
         ];
     }
 
@@ -66,4 +70,15 @@ export default class MessageManager {
         writeSyncToClipboard(data);
         vscode.window.showInformationMessage('Copied to clipboard!');
     };
+
+    private _showError = (message: Message) => {
+        const error = message as ShowErrorMessage;
+        vscode.window.showErrorMessage(error.message);
+    };
+
+    private _showInformation = (message: Message) => {
+        const info = message as ShowInformationMessage;
+        vscode.window.showInformationMessage(info.message);
+    };
+
 }

@@ -20,8 +20,8 @@ export default class StateService {
         this._changeState({ category });
     };
 
-    public changeApiKey = (apiKey: string) => {
-        this._changeState({ apiKey });
+    public changeApiDetails = (apiKey: string, apiEmail: string) => {
+        this._changeState({ apiKey, apiEmail });
     };
 
     public changeBuilder = (id: string) => {
@@ -56,6 +56,10 @@ export default class StateService {
 
     public getApiKey = () => {
         return this._state.apiKey;
+    };
+
+    public getApiEmail = () => {
+        return this._state.apiEmail;
     };
 
     public getBuilder = () => {

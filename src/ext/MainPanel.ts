@@ -31,7 +31,7 @@ export default class MainPanel {
         const column = vscode.ViewColumn.Beside;
 
         if (MainPanel.currentPanel) {
-            MainPanel.currentPanel.panel.reveal(column);
+            MainPanel.currentPanel.hide();
             return;
         }
 

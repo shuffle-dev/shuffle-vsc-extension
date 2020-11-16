@@ -1,5 +1,6 @@
-import { throws } from 'assert';
 import StateService from '../state/StateService';
+import VscApi from '../utils/VscApi';
+import { Messages, ShowErrorMessage } from '../../../shared/Messages';
 
 export default class HeaderManager {
     private readonly _buildersContainer: HTMLDivElement | null;
@@ -48,12 +49,19 @@ export default class HeaderManager {
 
     private _handleFetchButtonClick = () => {
         const apiKey = this._apiKeyInput?.value;
+        const apiEmail = this._apiEmailInput?.value;
 
-        if (apiKey === undefined) {
+        if (!apiKey || !apiEmail) {
+            const message : ShowErrorMessage = {
+                type: Messages.SHOW_ERROR,
+                message: 'Please provide your e-mail and API key.',
+            };
+
+            VscApi.postMessage(message);
             return;
         }
 
-        this._stateService.changeApiKey(apiKey);
+        this._stateService.changeApiDetails(apiKey, apiEmail);
         this._stateService.fetchConfig();
     };
 
@@ -77,6 +85,11 @@ export default class HeaderManager {
         if (this._apiKeyInput) {
             const apiKey = this._stateService.getApiKey();
             this._apiKeyInput.value = apiKey;
+        }
+
+        if (this._apiEmailInput) {
+            const apiEmail = this._stateService.getApiEmail();
+            this._apiEmailInput.value = apiEmail;
         }
     };
 }

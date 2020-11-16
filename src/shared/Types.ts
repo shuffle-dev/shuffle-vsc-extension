@@ -23,6 +23,7 @@ export type MessageListener = {
 type IState = { [index: string]: any };
 export type State = IState & {
     apiKey: string,
+    apiEmail: string,
     builder: BuilderType,
     category: string,
     config: Config,

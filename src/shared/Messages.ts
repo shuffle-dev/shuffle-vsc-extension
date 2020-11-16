@@ -6,6 +6,8 @@ export enum Messages {
     CONFIG_REQUEST = 'config:reqquest',
     CONFIG_RESPONSE = 'config:response',
     SOURCE_REQUEST = 'source:reqquest',
+    SHOW_ERROR = 'show:error',
+    SHOW_INFORMATION = 'show:information',
 }
 
 export interface Message {
@@ -36,3 +38,14 @@ export interface SourceRequestMessage extends Message {
     type: Messages.SOURCE_REQUEST
     data: string
 }
+
+export interface ShowErrorMessage extends Message {
+    type: Messages.SHOW_ERROR
+    message: string
+}
+
+export interface ShowInformationMessage extends Message {
+    type: Messages.SHOW_INFORMATION
+    message: string
+}
+

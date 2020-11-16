@@ -24,7 +24,7 @@ export class Builders {
     };
 
     static readonly MATERIAL: BuilderType = {
-        id: 'material',
+        id: 'material-ui',
         name: 'Material-UI Builder',
         url: 'https://tailwind.build/components/js/27db_components.js?v=mui-n20'
     };
