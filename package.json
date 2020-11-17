@@ -3,6 +3,7 @@
     "displayName": "Shuffle.dev",
     "publisher": "shuffle-dev",
     "description": "Use Shuffle.dev UI components from within the Visual Studio Code editor.",
+    "icon": "https://bootstrapshuffle.com/static/img/extension-icon.png",
     "version": "1.0.0",
     "engines": {
         "vscode": "^1.50.0"
