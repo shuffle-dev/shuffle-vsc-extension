@@ -37,6 +37,10 @@ export default class StateService {
         VscApi.setState(state);
     };
 
+    public attachState = () => {
+        this._state = VscApi.getState() as State;
+    };
+
     private _changeState = (state: PartialState) => {
         VscApi.changeState(state);
         this._state = VscApi.getState() as State;

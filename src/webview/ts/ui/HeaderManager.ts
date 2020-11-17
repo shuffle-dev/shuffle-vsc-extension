@@ -132,7 +132,7 @@ export default class HeaderManager {
               document.querySelector<HTMLDivElement>('.full').classList.remove('hidden');
           }
 
-          if (apiEmail && apiKey) {
+          if (mode === 'full' && apiEmail && apiKey) {
               document.querySelector<HTMLDivElement>('#settings').classList.add('hidden');
           }
       };

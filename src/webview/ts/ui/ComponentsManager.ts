@@ -135,7 +135,7 @@ export default class ComponentsManager {
                 selectedIndex = index;
             }
         }
-
+        
         this._stateService.changeLibrary(selectedIndex);
         this._stateService.fetchComponents();
     };

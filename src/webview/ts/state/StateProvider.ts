@@ -1,6 +1,6 @@
 import VscApi from '../utils/VscApi';
 import MessageManager from '../MessageManager';
-import { State } from '../../../shared/Types';
+import { State, Editor } from '../../../shared/Types';
 import {
     ShuffleStateRestoreMessage,
     ShuffleStateResponseMessage,
@@ -33,12 +33,16 @@ export default class StateProvider {
         const { serverState } = message as ShuffleStateResponseMessage;
         const currentState = VscApi.getState();
         
-        if (currentState.mode !== serverState.mode) {
-            const { activeEditor } = currentState;
-            const serverEditor = serverState.editors.find((editor) => editor.id === activeEditor.id);
+        const { activeEditor } = currentState;
+        let serverEditor : Editor;
+
+        if (activeEditor && currentState.mode !== serverState.mode) {
+            serverEditor = serverState.editors.find((editor) => editor.id === activeEditor.id);
 
             if (serverEditor) {
-                const url = serverEditor.libraries[0].url;
+                const library = currentState.library;
+                const selectedLibrary = serverEditor.libraries.length > library ? library : 0; 
+                const url = serverEditor.libraries[selectedLibrary].url;
         
                 const message : ComponentsRequestMessage = {
                     type: Messages.COMPONENTS_REQUEST,
@@ -46,6 +50,7 @@ export default class StateProvider {
                 };
         
                 VscApi.postMessage(message);
+                VscApi.changeState( { activeEditor: serverEditor });
             }
         }
 
@@ -53,6 +58,7 @@ export default class StateProvider {
             ...currentState,
             editors: serverState.editors,
             mode: serverState.mode,
+            activeEditor: serverEditor ?? activeEditor
         };
 
         this._onChangeListener(state);
