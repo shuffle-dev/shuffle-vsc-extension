@@ -11,15 +11,22 @@ export default class StateService {
     }
 
     public fetchComponents = () => {
-        const { activeEditor } = this._state;
-        const url = activeEditor.libraries[0].url;
+        const { activeEditor, library } = this._state;
 
-        const message : ComponentsRequestMessage = {
-            type: Messages.COMPONENTS_REQUEST,
-            url
-        };
+        let url;
 
-        VscApi.postMessage(message);
+        if (activeEditor && activeEditor.libraries.length > library) {
+            url = activeEditor.libraries[library].url;
+        }
+
+        if ( url ) {
+            const message : ComponentsRequestMessage = {
+                type: Messages.COMPONENTS_REQUEST,
+                url
+            };
+    
+            VscApi.postMessage(message);
+        } 
     };
 
     /**
@@ -46,6 +53,11 @@ export default class StateService {
         }
 
         this._changeState({ activeEditor });
+        this.changeLibrary(0);
+    };
+
+    public changeLibrary = (library: number) => {
+        this._changeState({ library });
     };
 
     public changeCategory = (category: string) => {
@@ -81,6 +93,10 @@ export default class StateService {
 
     public getActiveEditor = () => {
         return this._state.activeEditor;
+    };
+
+    public getLibrary = () => {
+        return this._state.library;
     };
 
     public getCategory = () => {

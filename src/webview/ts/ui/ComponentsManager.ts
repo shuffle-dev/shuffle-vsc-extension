@@ -1,8 +1,9 @@
 import StateService from '../state/StateService';
 import VscApi from '../utils/VscApi';
-import { Messages, ComponentCodeRequestMessage } from '../../../shared/Messages';
+import { Messages, ComponentCodeRequestMessage, ComponentsRequestMessage } from '../../../shared/Messages';
 
 export default class ComponentsManager {
+    private readonly _libraryContainer: HTMLDivElement | null;
     private readonly _categoryContainer: HTMLDivElement | null;
     private readonly _componentsContainer: HTMLDivElement | null;
 
@@ -10,6 +11,7 @@ export default class ComponentsManager {
 
     constructor(stateService: StateService) {
         this._stateService = stateService;
+        this._libraryContainer = document.querySelector<HTMLDivElement>('#libraryContainer');
         this._categoryContainer = document.querySelector<HTMLDivElement>('#categoryContainer');
         this._componentsContainer = document.querySelector<HTMLDivElement>('#componentsContainer');
     };
@@ -19,8 +21,32 @@ export default class ComponentsManager {
     };
 
     public createStructure = () => {
+        this._createLibrarySelect();
         this._createCategorySelect();
         this._createComponents();
+    };
+
+    private _createLibrarySelect = () => {
+        this._clearLibrarySelect();
+
+        const select = document.createElement('select');
+
+        const activeEditor = this._stateService.getActiveEditor();
+        const currentLibrary = this._stateService.getLibrary();
+
+        if (activeEditor) {
+            activeEditor.libraries.forEach((library, index) => {
+                const option = document.createElement('option');
+                option.setAttribute('value', library.name);
+                option.innerText = library.name;
+                option.selected = index === currentLibrary;
+    
+                select.appendChild(option);
+            });
+        }
+
+        select.addEventListener('change', this._handleLibraryChange);
+        this._libraryContainer?.appendChild(select);
     };
 
     private _createCategorySelect = () => {
@@ -80,6 +106,12 @@ export default class ComponentsManager {
         });
     };
 
+    private _clearLibrarySelect = () => {
+        if(this._libraryContainer !== null) {
+            this._libraryContainer.innerHTML = '';
+        }
+    };
+
     private _clearCategorySelect = () => {
         if(this._categoryContainer !== null) {
             this._categoryContainer.innerHTML = '';
@@ -95,6 +127,19 @@ export default class ComponentsManager {
     /**
      * Handle Events
      */
+    private _handleLibraryChange = (e: Event) => {
+        const libraries = e.target as HTMLSelectElement;
+        let selectedIndex = 0;
+        for (let index = 0; index < libraries.options.length; index++) {
+            if (libraries.options[index].innerText === libraries.value) {
+                selectedIndex = index;
+            }
+        }
+
+        this._stateService.changeLibrary(selectedIndex);
+        this._stateService.fetchComponents();
+    };
+
     private _handleCategoryChange = (e: Event) => {
         const category = (e.target as HTMLInputElement).value;
         this._stateService.changeCategory(category);

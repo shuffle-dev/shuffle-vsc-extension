@@ -36,6 +36,7 @@ export type State = IState & {
     apiEmail: string,
     editors: Editor[],
     activeEditor: Editor | null,
+    library: number,
     category: string,
     components: Components,
 };

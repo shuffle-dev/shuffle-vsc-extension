@@ -90,8 +90,13 @@
     }
 }
 
+.status {
+    display: flex;
+    align-items: center;
+}
+
 /* Select category */
-#categoryContainer {
+#libraryContainer, #categoryContainer {
     margin-bottom: 1rem;
     margin-left: .75rem;
 

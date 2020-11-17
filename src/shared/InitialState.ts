@@ -6,6 +6,7 @@ export const initialState : State = {
     apiEmail: '',
     editors: [],
     activeEditor: null,
+    library: 0,
     category: '',
     components: {}
 };
