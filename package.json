@@ -17,7 +17,7 @@
     "main": "./out/ext/main.js",
     "contributes": {
         "keybindings": {
-            "key": "shift+c",
+            "key": "shift+ctrl+l",
             "command": "shuffle.window"
         },
         "commands": [
