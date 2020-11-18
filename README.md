@@ -15,7 +15,9 @@ Please go to "Account → VSC Extension" and follow instructions.
 
 ## Activate / Deactivate extension:
 
-Shift + Ctrl + l
+Extension shortcut: Shift + Ctrl + L
+
+Alternative: Open "Show All Commands" (Shift + CMD + P) menu and search for: Shuffle.dev: Toggle UI Component Library.
 
 ## Support
 

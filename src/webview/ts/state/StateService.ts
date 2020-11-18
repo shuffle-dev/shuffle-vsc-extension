@@ -108,7 +108,11 @@ export default class StateService {
     };
 
     public getCategories = () => {
-        return Object.keys(this._state.components);
+        if (this._state.components) {
+            return Object.keys(this._state.components);
+        } else {
+            return [];
+        }
     };
 
     public getComponents = (category?: string): Component[] => {
