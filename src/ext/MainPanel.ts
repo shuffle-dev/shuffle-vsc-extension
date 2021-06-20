@@ -7,7 +7,7 @@ import { initialState } from '../shared/InitialState';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
-    public static readonly viewTitle = 'Shuffle.dev';
+    public static readonly viewTitle = 'UI Libraries by Shuffle';
     public static readonly viewType = 'shuffle';
 
     public readonly panel: vscode.WebviewPanel;

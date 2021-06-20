@@ -85,7 +85,7 @@ export default class ComponentsManager {
             if (component.code) {
                 wrapper.href = '#';
             } else {
-                wrapper.href = 'https://tailwind.build';
+                wrapper.href = 'https://shuffle.dev/?utm_source=vsc&utm_medium=extension';
                 wrapper.target = '_blank';
 
                 const needsPro = document.createElement('div');

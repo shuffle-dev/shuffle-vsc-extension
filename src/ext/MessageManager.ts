@@ -49,7 +49,7 @@ export default class MessageManager {
 
     private _fetchState = (message: Message) => {
         const { apiKey, apiEmail } = message as ShuffleStateFetchMessage;
-        const url = `https://bootstrapshuffle.com/api/state?api_key=${apiKey}&email=${apiEmail}`;
+        const url = `https://shuffle.dev/api/state?api_key=${apiKey}&email=${apiEmail}`;
 
         fetch(url)
             .then((res) => res.text())
