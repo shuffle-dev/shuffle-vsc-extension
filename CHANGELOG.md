@@ -1,3 +1,7 @@
 ### 1.0.0
 
-- Initial release an extension that's connect Shuffle.dev editors with VSC.
+- Initial release of an extension that connect Shuffle.dev UI libraries with Visual Studio Code.
+
+### 1.0.4
+
+- Switch context from multiple editors to Shuffle.dev
