@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import MainPanel from './MainPanel';
 
 export function activate(context: vscode.ExtensionContext) {
-    
     let disposable = vscode.commands.registerCommand('shuffle.window', () => {
         MainPanel.shuffleWindow(context);
     });

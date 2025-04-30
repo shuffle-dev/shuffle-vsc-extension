@@ -1,6 +1,6 @@
+import { Messages, ShowErrorMessage, ShuffleStateFetchMessage } from '../../../shared/Messages';
 import StateService from '../state/StateService';
 import VscApi from '../utils/VscApi';
-import { Messages, ShuffleStateFetchMessage, ShowErrorMessage } from '../../../shared/Messages';
 
 export default class HeaderManager {
     private readonly _editorsContainer: HTMLDivElement | null;
@@ -55,7 +55,7 @@ export default class HeaderManager {
         const apiEmail = this._apiEmailInput?.value;
 
         if (!apiKey || !apiEmail) {
-            const message : ShowErrorMessage = {
+            const message: ShowErrorMessage = {
                 type: Messages.SHOW_ERROR,
                 message: 'Please provide your e-mail and API key.',
             };
@@ -66,7 +66,7 @@ export default class HeaderManager {
 
         this._stateService.changeApiDetails(apiKey, apiEmail);
 
-        const message : ShuffleStateFetchMessage = {
+        const message: ShuffleStateFetchMessage = {
             type: Messages.SHUFFLE_STATE_FETCH,
             apiKey,
             apiEmail
@@ -93,47 +93,47 @@ export default class HeaderManager {
      */
     private _setActiveEditor = () => {
         const editors = this._editorsContainer?.querySelectorAll('button[data-id]');
-  
+
         if (!editors) {
             return;
         }
-  
+
         editors.forEach(item => item.classList.remove('active'));
-  
+
         const editor = this._stateService.getActiveEditor();
-  
+
         if (editor) {
             Array.from(editors)
                 .find(item => item.getAttribute('data-id') === editor.id)
                 ?.classList.add('active');
         }
-      };
-  
-      private _setApiSettings = () => {
-          let apiKey : string;
-          let apiEmail : string;
+    };
 
-          if (this._apiKeyInput) {
-              apiKey = this._stateService.getApiKey();
-              this._apiKeyInput.value = apiKey;
-          }
-  
-          if (this._apiEmailInput) {
-              apiEmail = this._stateService.getApiEmail();
-              this._apiEmailInput.value = apiEmail;
-          }
- 
-          const mode = this._stateService.getMode();
-          if (mode === 'demo') {
-              document.querySelector<HTMLDivElement>('.demo').classList.remove('hidden');
-              document.querySelector<HTMLDivElement>('.full').classList.add('hidden');
-          } else {
-              document.querySelector<HTMLDivElement>('.demo').classList.add('hidden');
-              document.querySelector<HTMLDivElement>('.full').classList.remove('hidden');
-          }
+    private _setApiSettings = () => {
+        let apiKey: string = '';
+        let apiEmail: string = '';
 
-          if (mode === 'full' && apiEmail && apiKey) {
-              document.querySelector<HTMLDivElement>('#settings').classList.add('hidden');
-          }
-      };
+        if (this._apiKeyInput) {
+            apiKey = this._stateService.getApiKey();
+            this._apiKeyInput.value = apiKey;
+        }
+
+        if (this._apiEmailInput) {
+            apiEmail = this._stateService.getApiEmail();
+            this._apiEmailInput.value = apiEmail;
+        }
+
+        const mode = this._stateService.getMode();
+        if (mode === 'demo') {
+            document.querySelector<HTMLDivElement>('.demo')!.classList.remove('hidden');
+            document.querySelector<HTMLDivElement>('.full')!.classList.add('hidden');
+        } else {
+            document.querySelector<HTMLDivElement>('.demo')!.classList.add('hidden');
+            document.querySelector<HTMLDivElement>('.full')!.classList.remove('hidden');
+        }
+
+        if (mode === 'full' && apiEmail && apiKey) {
+            document.querySelector<HTMLDivElement>('#settings')!.classList.add('hidden');
+        }
+    };
 }

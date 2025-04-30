@@ -1,9 +1,9 @@
-import * as vscode from 'vscode';
 import { readFileSync } from 'fs';
-import MessageManager from './MessageManager';
-import { Messages, ShuffleStateFetchMessage, ShuffleStateRestoreMessage, ComponentsRequestMessage } from '../shared/Messages';
-import { State } from '../shared/Types';
+import * as vscode from 'vscode';
 import { initialState } from '../shared/InitialState';
+import { Messages, ShuffleStateFetchMessage, ShuffleStateRestoreMessage } from '../shared/Messages';
+import { State } from '../shared/Types';
+import MessageManager from './MessageManager';
 
 export default class MainPanel {
     public static currentPanel: MainPanel | undefined;
@@ -71,7 +71,7 @@ export default class MainPanel {
         let hasComponents = true;
 
         if (state) {
-            const message : ShuffleStateRestoreMessage = {
+            const message: ShuffleStateRestoreMessage = {
                 type: Messages.SHUFFLE_STATE_RESTORE,
                 state
             };
@@ -84,7 +84,7 @@ export default class MainPanel {
             const apiKey = state.apiKey ? state.apiKey : initialState.apiKey;
             const apiEmail = state.apiEmail ? state.apiEmail : initialState.apiEmail;
 
-            const message : ShuffleStateFetchMessage = {
+            const message: ShuffleStateFetchMessage = {
                 type: Messages.SHUFFLE_STATE_FETCH,
                 apiKey,
                 apiEmail
@@ -97,7 +97,7 @@ export default class MainPanel {
 
     private _createHtmlView() {
         const webview = this.panel.webview;
-        const mediaPath = vscode.Uri.joinPath(this.context.extensionUri,  'media');
+        const mediaPath = vscode.Uri.joinPath(this.context.extensionUri, 'media');
 
         const htmlPath = vscode.Uri.joinPath(mediaPath, 'index.html');
         const scriptPath = vscode.Uri.joinPath(mediaPath, 'main.js');

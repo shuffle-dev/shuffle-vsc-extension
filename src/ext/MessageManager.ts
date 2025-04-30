@@ -1,20 +1,20 @@
-import * as vscode from 'vscode';
-import fetch from 'node-fetch';
 import { writeSync as writeSyncToClipboard } from 'clipboardy';
-import MainPanel from './MainPanel';
+import fetch from 'node-fetch';
+import * as vscode from 'vscode';
 import {
-    ShuffleStateFetchMessage,
-    ShuffleStateResponseMessage,
-    ShuffleStateStoreMessage,
+    ComponentCodeRequestMessage,
     ComponentsRequestMessage,
     ComponentsResponseMessage,
     Message,
     Messages,
-    ComponentCodeRequestMessage,
     ShowErrorMessage,
     ShowInformationMessage,
+    ShuffleStateFetchMessage,
+    ShuffleStateResponseMessage,
+    ShuffleStateStoreMessage,
 } from '../shared/Messages';
 import { MessageListener } from '../shared/Types';
+import MainPanel from './MainPanel';
 
 export default class MessageManager {
     private readonly mainPanel: MainPanel;
@@ -49,19 +49,20 @@ export default class MessageManager {
 
     private _fetchState = (message: Message) => {
         const { apiKey, apiEmail } = message as ShuffleStateFetchMessage;
-        const url = `https://shuffle.dev/api/state?api_key=${apiKey}&email=${apiEmail}`;
+        const encodedEmail = encodeURIComponent(apiEmail);
+        const url = `https://shuffle.dev/api/state?api_key=${apiKey}&email=${encodedEmail}`;
 
         fetch(url)
             .then((res) => res.text())
             .then(res => {
                 const json = JSON.parse(res);
-                
+
                 if (json.editors) {
-                    const message : ShuffleStateResponseMessage = {
+                    const message: ShuffleStateResponseMessage = {
                         type: Messages.SHUFFLE_STATE_RESPONSE,
                         serverState: json
                     };
-    
+
                     this.postMessage(message);
                 }
             })
@@ -105,5 +106,4 @@ export default class MessageManager {
         const info = message as ShowInformationMessage;
         vscode.window.showInformationMessage(info.message);
     };
-
 }
