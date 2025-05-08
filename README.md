@@ -1,6 +1,6 @@
 # Shuffle
 
-[Shuffle](https://shuffle.dev/?utm_source=vsc&utm_medium=extension) is a visual editor for busy developers. It has a simple, intuitive drag &amp; drop interface and 2,000+ ready-made UI components for Tailwind CSS, Bootstrap, Bulma, and Material-UI.
+[Shuffle](https://shuffle.dev/?utm_source=vsc&utm_medium=extension) is a visual editor for busy developers. It has a simple, intuitive drag &amp; drop interface and 13,100+ ready-made UI components for Tailwind CSS, Bootstrap, Bulma, MUI, and shadcn/ui.
 
 Read more about supported frameworks:
 
@@ -8,6 +8,7 @@ Read more about supported frameworks:
 * [Bootstrap Editor by Shuffle](https://shuffle.dev/bootstrap?utm_source=vsc&utm_medium=extension)
 * [Bulma Editor by Shuffle](https://shuffle.dev/bulma?utm_source=vsc&utm_medium=extension)
 * [Material-UI Editor by Shuffle](https://shuffle.dev/material-ui?utm_source=vsc&utm_medium=extension)
+* [shadcn/ui Editor by Shuffle](https://shuffle.dev/new?editor=shadcn/ui)
 
 ![Shuffle Editor](https://static.shuffle.dev/files/shuffle.gif)
 
