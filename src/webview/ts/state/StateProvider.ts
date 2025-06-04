@@ -34,7 +34,7 @@ export default class StateProvider {
         const currentState = VscApi.getState();
         
         const { activeEditor } = currentState;
-        let serverEditor : Editor;
+        let serverEditor : Editor|undefined;
 
         if (activeEditor && currentState.mode !== serverState.mode) {
             serverEditor = serverState.editors.find((editor) => editor.id === activeEditor.id);

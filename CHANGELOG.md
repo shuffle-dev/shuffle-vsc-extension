@@ -9,3 +9,8 @@
 ### 1.0.5
 - Fixed full mode for users with email addresses containing ‘+’ signs
 - Vendor updates
+
+
+### 1.1.0
+- Bugfixes
+- UX updates

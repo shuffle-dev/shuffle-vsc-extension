@@ -156,7 +156,7 @@
     max-height: 100%;
     margin: 0 auto 20px auto;
     border-radius: 8px;
-    cursor: pointer;
+    cursor: copy;
 }
 
 .needs-pro {
@@ -165,5 +165,36 @@
     right: 0;
     bottom: 0;
     left: 0;
+    background-color: rgba(24, 24, 24, .5);
+    cursor: pointer;
+
+    &:hover {
+        .buy-license {
+            display: flex;
+        }
+    }
+}
+
+.buy-license {
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 380px;
+    max-width: 80%;
+    padding: .75rem 1rem;
+    margin: 1rem auto;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
     background-color: #181818;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, .8);
+    border-radius: 8px;
+
+    svg {
+        margin-right: 4px;
+        width: 20px;
+        height: 20px;
+    }
 }
