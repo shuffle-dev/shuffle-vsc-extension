@@ -4,21 +4,21 @@
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
 
 div.settings#settings
-    a(href="https://shuffle.dev/?utm_source=vsc&utm_medium=extension")
+    a(href="https://shuffle.dev/?utm_source=vsc&utm_medium=extension" class="logo")
         img(src="https://shuffle.dev/vendor/shuffle/img/brand/shuffle-logo-blue-dark.svg" alt="" height="24")
 
     div.demo
         p This is a #[span.text-warning DEMO] version. You need to create a Shuffle account to use all UI components.
         ul
             li
-                | Please visit #[a(href="https://shuffle.dev/?utm_source=vsc&utm_medium=extension") Shuffle →]
+                | Please visit #[a(href="https://shuffle.dev/pricing?utm_source=vsc&utm_medium=extension") Shuffle →]
 
         p After creating the account, please visit "Account → VSC Extension" and paste your API details below:
  
     div.full.hidden
         p Please go to "Account → VSC Extension" (#[a(href="https://shuffle.dev/?utm_source=vsc&utm_medium=extension") Shuffle]) and paste your API details below:
 
-    .form
+    .form.mb-0
         .control
             label(for="apiEmailInput") E-mail:
             input#apiEmailInput(type="text")

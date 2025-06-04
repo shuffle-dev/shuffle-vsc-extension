@@ -4,7 +4,7 @@
     "publisher": "shuffle-dev",
     "description": "Use Shuffle.dev UI components from within the Visual Studio Code editor.",
     "icon": "media/shuffle-logo.png",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "engines": {
         "vscode": "^1.50.0"
     },

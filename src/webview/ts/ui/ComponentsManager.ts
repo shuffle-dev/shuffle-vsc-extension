@@ -79,12 +79,14 @@ export default class ComponentsManager {
         const components = this._stateService.getComponents();
 
         components.map((component) => {
-            const wrapper = document.createElement('a');
-            wrapper.classList.add('component-wrapper');
+            let wrapper; 
 
             if (component.code) {
-                wrapper.href = '#';
+                wrapper = document.createElement('div');
+                wrapper.classList.add('component-wrapper');
             } else {
+                wrapper = document.createElement('a');
+                wrapper.classList.add('component-wrapper');
                 wrapper.href = 'https://shuffle.dev/?utm_source=vsc&utm_medium=extension';
                 wrapper.target = '_blank';
 
@@ -104,6 +106,8 @@ export default class ComponentsManager {
             wrapper.appendChild(preview);
             this._componentsContainer?.appendChild(wrapper);
         });
+
+        document.getElementById('howto-message')?.classList.remove('hidden');
     };
 
     private _clearLibrarySelect = () => {

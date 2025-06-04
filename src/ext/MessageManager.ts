@@ -74,7 +74,7 @@ export default class MessageManager {
 
     private _fetchComponents = (message: Message) => {
         const { url } = message as ComponentsRequestMessage;
-
+        
         fetch(url)
             .then((res) => res.text())
             .then(res => {
